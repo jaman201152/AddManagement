@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<p>The setDate() method can be used to add days to a date.</p>
+
+<p id="demo"></p>
+
+<script>
+
+   // *************** Start today date pick *********************
+                          var d = new Date();
+                var tyear = d.getFullYear();
+                var tmonth = (d.getMonth() < 10) ? "0" + (d.getMonth()) : (d.getMonth());
+                var tday = (d.getDate() < 10) ? "0" + d.getDate() : d.getDate();
+                var thour = (d.getHours() < 10) ? "0" + d.getHours() : d.getHours();
+                var tminute = (d.getMinutes() < 10) ? "0" + d.getMinutes() : d.getMinutes();
+                var tsecond = (d.getSeconds() < 10) ? "0" + d.getSeconds() : d.getSeconds();
+
+                // alert(d.getDate() + "." + month + "." + d.getFullYear() + " " + hour + ":" + minute + ":" + second); 
+                var today = tyear + "-" + tmonth + "-" + tday;
+                //*************** End Today Date Pick *****************
+
+// Current Week
+var curr = new Date(); // get current date
+var first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
+var last = first + 6; // last day is the first day + 6
+ //var day = (curr.getDate() < 10) ? "0" + curr.getDate() : curr.getDate();
+var firstday = new Date(curr.setDate(first));
+var lastday = new Date(curr.setDate(last));
+var frommonth =firstday.getMonth()+1; // it incerase month number because indexing from 0;
+var tomonth =lastday.getMonth()+1;		// it incerase month number because indexing from 0;
+var day = (firstday.getDate() < 10) ? "0" + firstday.getDate() : firstday.getDate();
+var month = (frommonth < 10) ? "0" + frommonth : frommonth;
+ var year = firstday.getFullYear() ;
+ 
+ var lastdate = (lastday.getDate() < 10) ? "0" + lastday.getDate() : lastday.getDate();
+var lastmonth = (tomonth < 10) ? "0" + tomonth : tomonth;
+ var lastyear = lastday.getFullYear();
+ 
+var fromDate = year + "-" + month + "-" + day;
+var toDate = lastyear + "-" + lastmonth + "-" + lastdate;
+/*
+var date = new Date();
+var firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+*/
+
+
+/* Start Current Month */
+ y = curr.getFullYear(), m = curr.getMonth();
+var firstDayOfMonth = new Date(y, m, 1);
+var lastDayOfMonth = new Date(y, m + 1, 0);
+
+var fy = firstDayOfMonth.getFullYear();
+var fm = firstDayOfMonth.getMonth()+1;
+var realfm = (fm < 10) ? "0" + fm : fm;
+var fd = firstDayOfMonth.getDate();
+var realfd = (fd < 10) ? "0" + fd : fd;
+
+var ly = lastDayOfMonth.getFullYear();
+var lm = lastDayOfMonth.getMonth()+1;
+var reallm = (lm < 10) ? "0" + lm : lm;
+var ld = lastDayOfMonth.getDate();
+var realld = (ld < 10) ? "0" + ld : ld;
+var firstDayOfMonthf = fy+"-"+realfm+"-"+realfd;
+var lastDayOfMonthf = ly+"-"+reallm+"-"+realld;
+/* End Current Month  */
+
+/* Start last Month */
+ y = curr.getFullYear(), m = curr.getMonth();
+var firstDayOflMonth = new Date(y, m, 1);
+var lastDayOflMonth = new Date(y, m + 1, 0);
+
+var fy = firstDayOflMonth.getFullYear();
+var fm = firstDayOflMonth.getMonth(); // to get current month
+var realfm = (fm < 10) ? "0" + fm : fm;
+var fd = firstDayOflMonth.getDate();
+var realfd = (fd < 10) ? "0" + fd : fd;
+
+var ly = lastDayOflMonth.getFullYear();
+var lm = lastDayOflMonth.getMonth();
+var reallm = (lm < 10) ? "0" + lm : lm;
+var ld = lastDayOflMonth.getDate();
+var realld = (ld < 10) ? "0" + ld : ld;
+var firstDayOflMonthf = fy+"-"+realfm+"-"+realfd;
+var lastDayOflMonthf = ly+"-"+reallm+"-"+realld;
+
+
+
+var LastDayPrevMonth = new Date(tyear, tmonth, 0).getDate();
+
+
+/* End last Month  */
+
+
+
+document.getElementById("demo").innerHTML ="Today: "+today+"; Current Week = " + fromDate+" to "+toDate+"<br/>Current Month First Day of Month: "+firstDayOfMonthf+ " to "+lastDayOfMonthf+"<br/> Last Month: "+firstDayOflMonthf+" to "+lastDayOflMonthf+LastDayPrevMonth;
+
+</script>
+
+</body>
+</html>
