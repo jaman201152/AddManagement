@@ -1,70 +1,35 @@
-<style>
-    .left_div{
-        padding:0px 50px;
-        float:left;
-    }
-    .right_div{
-        float:right;
-        padding:0px 100px;
-    }
-</style>
 
-<table id="dg" title="List of all clients" class="easyui-datagrid" style="width:auto; max-height:450px; overflow: scroll; min-height: 400px;"
-       data-options="view:scrollview,iconCls:'icon-customer',remoteSort:false, multiSort:true " url="customer_profile/member_search.php"
+<table id="dg" title="List of all references" class="easyui-datagrid" style="width:auto; max-height:450px; overflow: scroll; min-height: 500px;"
+       data-options="iconCls:'icon-customer',remoteSort:false, multiSort:true " url="reference_profile/member_search.php"
        toolbar="#toolbar" pagination="false"
        rownumbers="true" fitColumns="true" singleSelect="true">
     <thead>
         <tr>
-            <th data-options="field:'ck',checkbox:true " ></th>
-            <th field="cust_id" width="50" sortable="true" title="test1">#</th>
-            <th field="cust_id_new" width="100" sortable="true" title="test1">ID.</th>
-            <th field="name_custom" width="150" sortable="true" title="test">Name</th>
-            <th field="address_custom" width="auto">Town/House</th>
-            <th field="country" width="auto">Division</th>
-            <th field="statename" width="auto">District</th>
-            <th field="upazila" width="auto">Thana</th>
-            <th field="type" width="auto" sortable="true">Type</th>
-            <th field="project_name" width="auto" sortable="true">Company Category</th>
-            <th field="ref_name" width="auto" sortable="true">Reference Name</th>
-            <th field="contact_person" width="auto" sortable="true">Contact Person Name</th>
-            <th field="phone" width="auto">Phone</th>
-            <th field="email" width="auto">Email</th>
-            <th field="join_date">Clients Create date</th>
-            <th field="website" width="auto">Web site</th>
+                <th field="ref_id" width="auto">ID.</th>
+                <th field="ref_name" width="auto">Name</th>
+                <th field="ref_address" width="auto">Address</th>
+                <th field="country" width="auto">Division</th>
+                <th field="statename" width="auto">District</th>
+                <th field="ref_upazila" width="auto">Upazila</th>
+                <th field="ref_phone" width="auto">Phone</th>
+                <th field="ref_email" width="auto">Email</th>
+                <th field="ref_created_at" width="auto">Created at</th>
+                <th field="ref_updated_at" width="auto">Updated at</th>
         </tr>
     </thead>
 </table>
 
-<!-- Company Type Name Form Window-Layout Start -->
-    <?php include_once 'company_type/add_company_type.php'; ?>
-<!-- End Company Type dialogbox -->
-
-<!-- Company Category Form Window-Layout Start -->
-    <?php include_once 'company_cat/add_company_cat.php'; ?>
-<!-- End Company Category dialogbox -->
-
-<!-- Type Name Form Window-Layout Start -->
-    <?php include'add_type/add_type.php';?>
-<!-- End Type dialogbox -->
-
-<!-- Bank Name Form Window-Layout Start -->
-    <?php include'add_bank/add_bank_name.php';?>
-<!-- End Bank Name dialogbox -->
-
-
 <div id="toolbar">
-    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="false" onclick="newUser()">New Clients </a>
-
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="false" onclick="newReference()">New Reference </a>
     <?php
     if ($_SESSION['s_email'] == 'admin@dailyasianage.com' || $_SESSION['s_email'] == 'superadmin@dailyasianage.com') {
         ?>
         <a href="javascript:void(0)" class="easyui-linkbutton" id="edt" iconCls="icon-edit" plain="false" onclick="editUser()">Edit </a>
-<!--        <a href="javascript:void(0)" class="easyui-linkbutton" id="cnl" iconCls="icon-remove" plain="false" onclick="destroyUser()">Destroy </a>-->
+        <a href="javascript:void(0)" class="easyui-linkbutton" id="cnl" iconCls="icon-remove" plain="false" onclick="destroyUser()">Destroy </a>
 
         <?php
     }
     ?>
-
     <a href="javascript:void(0)" class="easyui-linkbutton" id="client_profile" iconCls="icon-profile" plain="false" onclick="profile()">Profile</a>
     <a href="javascript:void(0)" class="easyui-linkbutton" id="customerPrint" iconCls="icon-print" plain="false" target="_blank" >Print</a>
     <span id='selected_id'></span>
@@ -73,15 +38,15 @@
         <a href="#" class="easyui-linkbutton" plain="false" iconCls="icon-search" onclick="doSearch()" >Search</a>
     </span>
 
-
 </div>
 <!-- End Customer tool bar -->
 
 
-<div id="dlg" class="easyui-dialog" data-options="iconCls:'icon-add' " style="width:700px;height:550px;padding:10px 80px 10px 80px"
+<div id="dlg" class="easyui-dialog" data-options="iconCls:'icon-add' " style="width:700px;height:500px;padding:10px 80px 10px 80px"
      closed="true" buttons="#dlg-buttons">
-    <fieldset style="border:1px #ccc solid;"><legend>Customer Information</legend>
+    <fieldset><legend>Customer Information</legend>
         <form id="fm" method="post" novalidate>
+
             <div class="fitem">
                 <label>Company Name</label>
                 <input name="name" id="name"  class="easyui-textbox" style="width:200px;" required="true">
@@ -95,40 +60,43 @@
 
             <div class="fitem">
                 <label>Type</label>
-                <select name="type" id="txttype" required="required"  onchange="companyType(this.value)">
-                    <option value="">Select Any One</option>
-                    <option value="addNew">Add New</option>
-                              <?php
-                   
-                    $query_company_type = $con->prepare("Select companytypeid, company_type_name from company_type_tbl group by company_type_name");
-                    $query_company_type->execute();
-                    while ($row_ref = $query_company_type->fetch(PDO::FETCH_ASSOC)) {
-                        extract($row_ref);
-                        ?>
-                        <option value="<?php echo $companytypeid; ?>"><?php echo $company_type_name; ?></option>
-                        <?php
-                    }
-                    ?>
+                <select name="type" required="required">
+                    <option value="">-- Please Select --</option>
+                    <option value="Government">Government</option>
+                    <option value="Private">Private</option>
+                    <option value="Multinational">Multinational</option>
+                    <option value="Others">Others</option>
                 </select>
             </div>
             <div class="fitem">
                 <label>Company Category</label>
-            <select name="project_name" id="txtproject_name" required="required">
-                    <option value="0">Select Company Type First</option>
-                    </select>
+                <select name="project_name" required="required">
+                    <option value="">-- Please Select --</option>
+                    <option value="Apparel_Garment">Apparel/Garment</option>
+                    <option value="Bank">Bank</option>
+                    <option value="Real_State">Real State</option>
+                    <option value="Insurance">Insurance</option>
+                    <option value="Industry">Industry</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Pharmaceutical">Pharmaceutical</option>
+                    <option value="Telecommunication">Telecommunication</option>
+                    <option value="Group_of_Companies">Group of Companies</option>
+                    <option value="Others">Others</option>
+                </select>
             </div>
             <div class="fitem" >
                 <label>Reference Name</label>
-                <select name="ref_id" id="ref_name" required="required" style="width:150px;">
+                <select name="ref_id" id="ref_name" required="required">
                     <option value="">-- Please Select --</option>
                     <option value="addNew">Add New</option>
                     <?php
+                    include 'conn.php';
                     $query_ref = $con->prepare("Select ref_id, ref_name,ref_upazila from tbl_reference group by ref_name");
                     $query_ref->execute();
                     while ($row_ref = $query_ref->fetch(PDO::FETCH_ASSOC)) {
                         extract($row_ref);
                         ?>
-                        <option value="<?php echo $ref_id;?>"><?php echo $ref_name.', Id.'.$ref_id.' - '.$ref_upazila; ?></option>
+                        <option value="<?php echo $ref_id; ?>"><?php echo $ref_name.' - '.$ref_upazila; ?></option>
                         <?php
                     }
                     ?>
@@ -169,10 +137,6 @@
                     </select></div>
             </div>
             <div class="fitem">
-                <label>Contact Person Name</label>
-                <input name="contact_person" class="easyui-textbox" >
-            </div>
-            <div class="fitem">
                 <label>Phone</label>
                 <input name="phone" class="easyui-textbox" >
             </div>
@@ -196,7 +160,6 @@
 <div id="reference" class="easyui-dialog" style="width:600px;height:500px; padding:2px 2px;"
      closed="true" buttons="#reference_south_buttons">
     <div class="easyui-layout" fit="true"  id="profile_layout" >
-
 
 
         <div data-options=" region:'center', split:'true', title:'Add New Reference', iconCls:'icon-ok' " style="padding:5px;">
@@ -248,7 +211,6 @@
                 </div>
 
 
-
             </form>
         </div>
 
@@ -259,7 +221,7 @@
 
 
 <!-- Individual Profile dialog-Layout Start -->
-<div id="profile" class="easyui-dialog" style="width:1124px;height:600px; padding:2px 2px;"
+<div id="profile" class="easyui-dialog" style="width:1024px;height:600px; padding:2px 2px;"
      data-options="iconCls:'icon-profile' " closed="true" buttons="#south_buttons">
     <div class="easyui-layout" fit="true"  id="profile_layout" >
 
@@ -272,30 +234,26 @@
  <div data-options=" region:'west',split:'true',title:' ' " style="width:80px; padding:3px;">
         </div>
          -->
-        <div data-options=" region:'center', split:'true', iconCls:'icon-ok' " style="padding:5px;width:900px; height:550px;">
+        <div data-options=" region:'center', split:'true', iconCls:'icon-ok' " style="padding:5px;width:750px; height:550px;">
 
-            <table id="grid_order" title="List of Order's" class="easyui-datagrid" style="width:100%; min-height: 200px; max-height:350px;"
+            <table id="grid_order" title="List of All Order's on Individual Reference" class="easyui-datagrid" style="width:100%; min-height: 130px; max-height:250px;"
                    toolbar="#toolbar_order" pagination="true"
-                   singleSelect="false" showFooter="true" fitColumn="true" >
+                   singleSelect="true" showFooter="true" fitColumn="true" >
                 <thead>
                     <tr>
                         <th data-options="field:'ck',checkbox:true "></th>
                         <th field="order_id" width="auto" title="Order ID" >O. ID.</th>
                         <th field="order_date" width="auto">O. Date</th>
-                        <th data-options="field:'status',align:'center',formatter:formatStatus ">Inv. Status</th>
+                        <th field="item" width="auto">Item</th>
+<!--                        <th data-options="field:'status',align:'center',formatter:formatStatus ">Inv. Status</th>-->
                         <th field="size"> Size </th>
                         <th field="price" data-options="align:'right' " width="auto">Price</th>
-                        <th field="front_page" width="100" sortable="true" data-options="align:'right' ">Front Page(%)</th>
-                        <th field="back_page" width="100" sortable="true" data-options="align:'right' ">Back Page(%)</th>
-                        <th field="color" width="100" sortable="true" data-options="align:'right' ">Color(%)</th>
-                        <th field="discount" width="auto" data-options="align:'right' ">Dis(%)</th>
+                    <th field="discount" width="auto" data-options="align:'right' ">Dis(%)</th>
                         <th field="discount_amount" width="auto" data-options="align:'right' ">Dis Amt.</th>
                         <th field="payable_amount" width="auto" data-options="align:'right' ">Receivable Amt.</th>
                         <th field="vat" width="auto" data-options="align:'right' ">VAT(%)</th>
                         <th field="tax" width="auto" data-options="align:'right' ">TAX(%)</th>
                         <th field="ref_name" width="auto">Ref. Name</th>
-                        <th field="item" width="auto">Item</th>
-
                     </tr>
 
                 </thead>
@@ -304,9 +262,9 @@
 
             <br/>
             <li>
-                <a href="javascript:void(0)" class="easyui-linkbutton" id="indcustomerPrint" iconCls="icon-print" plain="false" target="_blank" >Print Company Info</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton" id="indcustomerPrint" iconCls="icon-print" plain="false" >Print Reference Info</a>
                 <a href="javascript:void(0)" class="easyui-linkbutton" id="orderPrint" iconCls="icon-print" plain="false" target="_blank" >Print Order Info</a>
-                <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-home" plain="false" onclick="details_company()" >Company Details</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-home" plain="false" onclick="details_company()" >Reference Details</a>
             </li>
 <!--                        <div id="individual_order" ></div>-->
             <p id="demo" style="max-height:300px; overflow-y: scroll; "></p>
@@ -321,7 +279,7 @@
 <!-- Individual Profile Dialog-Layout End -->
 
 <!-- Order dialog Start -->
-<div id="order_individual" class="easyui-dialog" style="width:800px;height:600px; padding:2px 2px;"
+<div id="order_individual" class="easyui-dialog" style="width:900px;height:450px; padding:2px 2px;"
      closed="true" buttons="#order_south_buttons" data-options="iconCls:'icon-order_color' ">
     <div class="easyui-layout" fit="true"  id="order_layout" >
 
@@ -330,17 +288,47 @@
                 <div class="fitem" style="background: #F1F1F1;">
 
                     <label>Company Name: </label>
-                    <input type="hidden" name="cust_id_new" class="cust_id_new" readonly="readonly" />
-                    <input name="cust_id" type="hidden"  class="cust_id" style="text-align: right; padding: 2px;" />
-                    <input type="text" name="name" class="name" value="" style="text-transform:capitalize;" readonly="readonly"  /> 
+         <input name="cust_id"  class="easyui-combobox cust_id" id="cust_id" style="text-align: right; padding: 2px; width:250px; "  autocomplete="off" required="required" /> &nbsp;&nbsp;&nbsp;
+         <input type="hidden" name="cust_id_new"  class="cust_id_new" id="cust_id_new" style="text-align: right; padding: 2px;" complete="off" required="required" /> &nbsp;&nbsp;&nbsp;
+         <input type="hidden" name="name" class="name" value="" />     
 
-                    &nbsp;&nbsp;&nbsp;<label>Reference Name</label>
-                    <select name="ref_id" class="txtref_name" style="width:150px; ">
+                </div>
+                <br/>
+                <div class="fitem hidden_custom">
+                    &nbsp;&nbsp;&nbsp;<label>Type </label><select name="type" id="txttype" style="width:150px; ">
+                        <option value=""></option>
+                        <option value="Government">Government</option>
+                        <option value="Private">Private</option>
+                        <option value="Multinational">Multinational</option>
+                    </select>
+                </div>
+                <div class="fitem hidden_custom">
+                    &nbsp;&nbsp;&nbsp;<label>Company Category</label><select name="project_name"  class="txtproject_name" style="width:150px; " >
+                        <option value=""></option>
+
+                        <option value="Apparel_Garment">Apparel/Garment</option>
+                        <option value="Bank">Bank</option>
+                        <option value="Real_State">Real State</option>
+                        <option value="Insurance">Insurance</option>
+                        <option value="Industry">Industry</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Pharmaceutical">Pharmaceutical</option>
+                        <option value="Telecommunication">Telecommunication</option>
+                        <option value="Technology">Technology</option>
+                        <option value="News_Paper">News Paper</option>
+                        <option value="Group_of_Companies">Group of Companies</option>
+                        <option value="Information_Technology">Information Technology</option>
+                        <option value="Others">Others</option>
+                    </select>
+                </div>
+
+                <div class="fitem">
+                    &nbsp;&nbsp;&nbsp;<label>Reference Name</label><select name="ref_id" class="txtref_name" style="width:150px; ">
                         <option value=""></option>
                         <?php
-                        $query_ref_order1 = $con->prepare("Select ref_id,ref_name,ref_upazila from tbl_reference group by ref_name ");
-                        $query_ref_order1->execute();
-                        while ($row_ref_order = $query_ref_order1->fetch(PDO::FETCH_ASSOC)) {
+                        $query_ref_order = $con->prepare("Select ref_id,ref_name,ref_upazila from tbl_reference group by ref_name ");
+                        $query_ref_order->execute();
+                        while ($row_ref_order = $query_ref_order->fetch(PDO::FETCH_ASSOC)) {
                             extract($row_ref_order);
                             ?>
                             <option value="<?php echo $ref_id; ?>"><?php echo $ref_name.' - '.$ref_upazila; ?></option>
@@ -348,201 +336,50 @@
                         }
                         ?>
                     </select>
-                
                 </div>
-                <br/>
-                <div class="fitem hidden_custom">
-                    &nbsp;&nbsp;&nbsp;<label>Company Type </label><select name="type" id="txttype" style="width:150px; ">
-                        <option value=""></option>
-             <?php
-                 
-                    $query_company_type1 = $con->prepare("Select companytypeid, company_type_name from company_type_tbl group by company_type_name");
-                    $query_company_type1->execute();
-                    while ($row_ref = $query_company_type1->fetch(PDO::FETCH_ASSOC)) {
-                        extract($row_ref);
-                        ?>
-                        <option value="<?php echo $companytypeid; ?>"><?php echo $company_type_name; ?></option>
-                        <?php
-                    }
-                    ?>
-                    </select>
-                </div>
-                <div class="fitem hidden_custom">
-                    &nbsp;&nbsp;&nbsp;<label>Company Category</label><select name="project_name"  class="txtproject_name" style="width:150px; " >
-                        <option value=""></option>
-                        <?php
-                    $query_company_cat1 = $con->prepare("Select companycatid, company_cat_name from company_cat_tbl group by company_cat_name");
-                    $query_company_cat1->execute();
-                    while ($row_ref = $query_company_cat1->fetch(PDO::FETCH_ASSOC)) {
-                        extract($row_ref);
-                        ?>
-                        <option value="<?php echo $companycatid; ?>"><?php echo $company_cat_name; ?></option>
-                        <?php
-                    }
-                    ?>
-                    </select>
-                </div>
-                
                 <div class="fitem">
+                    <br/>
                     &nbsp;&nbsp;&nbsp;<label>Work Order No</label><input name="work_order_no" class="easyui-textbox" id="work_order_no" required="required" style="width: 150px;">
 
-                    &nbsp;&nbsp;&nbsp;
-                    <label>Order Date:</label>
-                    <input name="order_date" id="order_date" class="easyui-datebox" required="required" />
-                
                 </div>
-                <br/>
+                <div class="fitem">
+                    &nbsp;&nbsp;&nbsp;<br/><br/>
+                    <label>Order Date:</label>
+                    <input name="order_date" id="order_date" class="easyui-datetimebox" required="required" />
+                </div>
+                <br/><br/>
                 <div class="fitem">
                     <table width='100%' class="table_order">
                     <tbody>
-                        <tr style="background: #F1F1F1;"><td>Item</td><td>Position/Description</td><td>Row</td><td>Column</td>
-                            <td title="Quantity">Qty</td><td>Unit Price</td><td>Price</td>
-                        </tr>
+                        <tr style="background: #F1F1F1;"><td>Item</td><td>Description</td><td>Row</td><td>Column</td>
+                            <td title="Quantity">Qty</td><td>Unit Price</td><td>Price</td><td title="Discount">Dis.(%)</td>
+                            <td title="Discount Amount">Dis. Amt.</td><td title="Payable Amount">Receivable Amt.</td><td>VAT(%)</td><td>TAX(%)</td></tr>
                         <tr style="background: #F1F1F1;">
                             <td>
-                            <select name="item" class="item" id="item" style="width:150px;">
-                                     <option value="addNew"> Add New </option>
-                                      <?php
-                            $query_additem = $con->prepare("Select typeid, type_name from tbl_type group by type_name order by typeid ASC");
-                    $query_additem->execute();
-                    while ($row_type = $query_additem->fetch(PDO::FETCH_ASSOC)) {
-                        extract($row_type);
-                        ?>
-                        <option value="<?php echo $typeid; ?>"><?php echo $type_name; ?></option>
-                        <?php
-                    }
-                    ?>
+                            <select name="item" class="item" style="width:80px;">
+                                <option value="Advertisement"> Advertisement </option>
+                                <option value="others"> Others </option>
                             </select>
                         </td>
                         <td><input type="text" class="description" name="description" style="width:120px;"></td>
-                        <td><input type="text" name="o_row" class="row" style="width:50px;" autocomplete="off"></td>
-                        <td><input type="text" name="o_column" class="column" style="width:50px;" autocomplete="off"></td>
-                            <td><input type="text" name="qty" class="qty" style="width:50px;" id="qty" ></td>
-                            <td><input type="text" name="unit_price" id="unit_price" style="width:50px;" required="required" autocomplete="off"></td>
+                        <td><input type="text" name="row" class="row" style="width:25px;" autocomplete="off"></td>
+                        <td><input type="text" name="column" class="column" style="width:30px;" autocomplete="off"></td>
+                            <td><input type="text" name="qty" class="qty" style="width:50px;" id="qty" ></td><td><input type="text" name="unit_price" id="unit_price" style="width:50px;" required="required" autocomplete="off"></td>
                             <td><input type="text" name="price" id="price" style="width:50px;" required="required" autocomplete="off" readonly="readonly"></td>
-                        </tr>
-                        <tr  style="font-weight: bold;"><td colspan="5"></td>
-                            <td style="background: #F1F1F1; ">Gross Amount:</td>
-                            <td style="background: #F1F1F1; "><span class="gross_amount"></span></td>
-                        </tr>
-                        <tr><td colspan="5"></td>
-                            <td title="Front Page Charge(%)">Front Page Charge(%)</td>
-                               <td><input type="text" name="front_page" class="front_page" style="width:100px;" required="required" autocomplete="off"></td>
-                        </tr>
-                        <tr><td colspan="5"></td>
-                             <td title="Back Page Charge(%)">Back Page Charge(%)</td>
-                              <td><input type="text" name="back_page" class="back_page" style="width:100px;" required="required" autocomplete="off"></td>
-                        </tr>
-                        <tr><td colspan="5"></td>
-                                  <td title="Color Charge(%)">Color Charge(%)</td>
-                                     <td><input type="text" name="color" class="color" style="width:100px;" required="required" autocomplete="off"></td>
+                            <td><input type="text" name="discount" id="discount" style="width:50px;" autocomplete="off" required="required"> </td>
+                            <td><input type="text" name="discount_amount" id="discount_amount" style="width: 50px;" autocomplete="off" required="required" readonly="readonly"></td>
+                            <td>
+                                <input type="text" name="payable_amount" id="payable_amount" style="width:100px;" required="required" readonly="readonly">
 
+                                <input type="hidden" name="status" id="order_status" value="Invoice">
+                            </td>
+                            <td> <input type="text" name="vat" id="vat" value="0" style="width:50px;" required="required"></td>
+                            <td> <input type="text" name="tax" id="tax" value="0" style="width:50px;" required="required"></td>
                         </tr>
-                            
-                        <tr><td colspan="5"></td>
-                          <td title="Payable Amount"   style="background: #F1F1F1; font-weight: bold;">Total Advt. Bill</td>
-                          <td   style="background: #F1F1F1;"> 
-                              <input type="text" name="total_add_amount" class="total_add_amount" style="width:100px;" value="0" readonly="readonly"></td>
-                        </tr>
-                      
-                       
-                           <tr><td colspan="5"></td>
-                        <td title="Discount">Dis.(%)</td>
-                          <td><input type="text" name="discount" id="discount" style="width:100px;" autocomplete="off" required="required"> </td>
-                          
-                        </tr>
-                        <tr><td colspan="5"></td>
-                         <td title="Discount Amount">Dis. Amt.</td>
-                              <td><input type="text" name="discount_amount" id="discount_amount" style="width: 100px;" autocomplete="off" required="required" readonly="readonly"></td>
-                        
-                        </tr>
-                         <tr><td colspan="5"></td>
-                            <td   style="background: #F1F1F1; font-weight: bold;">Total Billing Amt.</td>
-                            <td   style="background: #F1F1F1;"> <input type="text" name="txt_billing_amt" class="txt_billing_amt" style="width:100px;"></td>
-                        </tr>
-                          <tr><td colspan="5"></td>
-                            <td>VAT(%)</td>
-                              <td> <input type="text" name="vat" id="vat"  style="width:100px;" autocomplete="off" required="required"></td>
-                       
-                        </tr>
-                        <tr><td colspan="5"></td>
-                            <td>TAX(%)</td>
-                            <td> <input type="text" name="tax" id="tax" style="width:100px;" autocomplete="off" required="required"></td>
-                        </tr>
-                         <tr><td colspan="5"></td>
-                            <td   style="background: #F1F1F1; font-weight: bold;">Total Payable Amt.</td>
-                                <td style="background: #F1F1F1;">
-                                    <input type="text"  name="payable_amount" id="payable_amount" style="width:100px;" readonly="readonly"></td>
-                         <input type="hidden" name="status" id="order_status" value="1">
-                         </tr>
-                         <tr><td></td><td colspan="5"></td></tr>
-                        
-                    
-                        
-                               
-                      
     </tbody>
-                    </table>	
+                    </table>    
                 </div>
             </form>
-            <script>
-                $(document).ready(function(){
-                    
-                    
-    // -------------- Calculate Row ---------------------
-        $('.table_order tbody').delegate('.row,.column,.front_page,.back_page,.color,#unit_price,#vat,#tax,#discount','keyup',function(){
-            // ******** row price cal ********
-            var row = $('.row').val();
-            var col = $('.column').val();
-            var qty = row*col;
-            $('.qty').val(qty);
-            var t_qty = parseFloat($('.qty').val());
-            var unit_price = $('#unit_price').val();
-            var total_price = t_qty*unit_price;
-            $('#price').val(total_price);
-            var to_price = $('#price').val();
-         //  console.log(t_qty);
-           // ******** End row price cal ********
-            var front_page = $('.front_page').val();
-            var back_page = $('.back_page').val();
-            var color = $('.color').val();
-            var price =parseFloat(to_price);
-            $('.gross_amount').text(price); // Just show gross amount of price
-                var front_page_amt = (price*front_page)/100;
-                var back_page_amt = (price*back_page)/100;
-                var color_amt = (price*color)/100;
-                var total_advt_amt = price + (front_page_amt+back_page_amt+color_amt);
-                $('.total_add_amount').val(total_advt_amt); // show tatal Advt Amount
-                
-                var discount = $('#discount').val();
-                var dis_amount = (total_advt_amt*discount)/100;
-                var to_fixed_dis_amount = dis_amount.toFixed(2);
-                $('#discount_amount').val(to_fixed_dis_amount);// get 2 decimal point of Dis Amount
-
-                var total_billing_amt = total_advt_amt-dis_amount;
-                var to_fixed_billing_amount = total_billing_amt.toFixed(2);
-                $('.txt_billing_amt').val(to_fixed_billing_amount);
-
-                var vat = $('#vat').val();
-                var tax = $('#tax').val();
-                var vat_amt = total_billing_amt*(vat/100);
-                var tax_amt = total_billing_amt*(tax/100);
-                var total_vat_tax = vat_amt+tax_amt;
-                var payable_amount = total_billing_amt+total_vat_tax;
-                var payable_amount_des = payable_amount.toFixed(2);
-                $('#payable_amount').val(payable_amount_des);
-
-           // console.log(dis_amount);
-               // console.log(front_page_amt+' '+back_page_amt+' '+color_amt);
-        });
-
-   
-        // -------------- End Calculate Row ---------------------
-                   
-                   
-                   
-                });
-            </script>
         </div>
 
     </div>
@@ -551,13 +388,12 @@
 
 
 <div id="toolbar_order">
-    <a href="javascript:void(0)"  class="easyui-linkbutton" iconCls="icon-add" plain="false" onclick="order_individual()" >New Order</a>
-    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-invoice_color"  plain="false" onclick="invoice()">Create Invoice</a>
-                <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-invoice_color"  plain="false" onclick="invoiceMulti()">Create Invoices by Multi-Select</a>
+<!--    <a href="javascript:void(0)"  class="easyui-linkbutton" iconCls="icon-add" plain="false" onclick="order_individual()" >New Order</a>-->
+<!--     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-invoice_color"  plain="false" onclick="invoice()">Create Invoice</a> -->
 
-    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-bill" plain="false" onclick="IndividualAllInvoice()">Invoices / Bill </a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-bill" plain="false" onclick="IndividualAllInvoice()">Payment / Bill </a>
 
-    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ereceipt" plain="false" onclick="IndividualAllEReceipt()">E-Receipt</a>
+ <!--    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ereceipt" plain="false" onclick="IndividualAllEReceipt()">E-Receipt</a> -->
 
 
 
@@ -599,49 +435,203 @@
 </div>
 <!-- dlg botton Start-->
 <div id="dlg-buttons">
-        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUserAndNew()" style="width:auto">Save & New</a>
     <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">Save</a>
     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" >Cancel</a>
 </div>
 
 <!-- ******************* Start Invoice Form ***************** -->
+<div id="dg_invoice_form" class="easyui-dialog" title="Create Invoices"  style="width:900px;height:500px;padding:10px"
+     data-options="iconCls:'icon-invoice_color' "  toolbar="#dlg-toolbar_invoice" buttons="#dlg-buttons-invoice" closed="true" >
+    <div class="easyui-layout" fit="true">
+        <!-- east Region Start-->
+        <!--      <div data-options="region:'east',split:'true' " title="History" style="width:180px;height:400px;">
+        <?php
+        include 'Menu/display_invoice_right_menu.php';
+        ?>
+              </div>-->
+        <!-- **************** east Region End ***********************-->
 
- <?php    include 'invoice/add_invoice.php'; ?>
-<?php    include 'invoice/add_multi_invoice.php'; ?>
-<!-- Invoice Form dialog end -->
+        <div data-options=" region:'center',split:'true'  " border="false">
+
+            <form method="POST" name="form2" id="invoice_form">
+                <table style="border-collapse:collapse;" width="100%">
+
+                    <tr style="background:#f1f1f1;">
+
+                        <td>
+                            <label>Customer ID. </label>
+                            <input type="text" name="cust_id_new" id="cust_id_new"  class="cust_id_new" style="text-align: right; padding: 2px; width: 120px;" readonly="readonly" /> &nbsp;&nbsp;&nbsp;
+                            <input type="hidden" name="cust_id" id="cust_id"  class="cust_id" style="text-align: right; padding: 2px; width: 50px;" /> &nbsp;&nbsp;&nbsp;
+
+                            <label>Order ID. </label><input type="text" name="order_id" style="width:50px;text-align: right;" readonly="readonly" /><!-- order_id value auto load when form load. -->
+
+                        </td><td width="50">&nbsp;</td>
+                        <td>
+                            <label>Order Date:</label>
+                            <input name="order_date" readonly="readonly"  />
+                        </td><td width="50">&nbsp;</td>
+                        <td>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">&nbsp;</td>
+                    </tr>
+                </table>
+                <table width='100%'>
+                    <tr>
+                        <td>
+                            <div class="easyui-panel" title="Work Order No" style="width:160px; height:55px;">
+                                <input class="easyui-textbox" name="work_order_no" id="work_order_no" required="required"></input>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="easyui-panel" title="Published Date" style="width:160px; height:55px;">
+                                <input class="easyui-datetimebox" name="pub_date" id="pub_date" required="required"></input>
+                            </div> 
+                        </td>
+                        <td>
+                            <div class="easyui-panel" title="Invoice Date" style="width:160px; height:55px;">
+                                <input class="easyui-datetimebox" name="invoice_date" id="invoice_date" required="required"></input>
+                            </div> 
+
+                        </td>
+                        <td>
+
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td><div style="font-weight: 700; color: #ccc;">Invoice</div>
+                            <div class="easyui-panel" title="Bill To" style="width:300px; height: 200px;">
+                                <table>
+                                    <tr>
+                                        <td>Company Name:</td><td><input class="easyui-textbox" name="name" style="width:auto;"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Reference Name:</td><td>
+                                            <select name="ref_id" class="txtref_name">
+                                                        <?php
+                        $query_ref_order = $con->prepare("Select ref_id,ref_name,ref_upazila from tbl_reference group by ref_name ");
+                        $query_ref_order->execute();
+                        while ($row_ref_order = $query_ref_order->fetch(PDO::FETCH_ASSOC)) {
+                            extract($row_ref_order);
+                            ?>
+                            <option value="<?php echo $ref_id; ?>"><?php echo $ref_name.' - '.$ref_upazila; ?></option>
+                            <?php
+                        }
+                        ?>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Address:</td><td><input class="easyui-textbox" name="address" style="width:auto;"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Phone:</td><td><input class="easyui-textbox" name="phone" style="width:auto;"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email:</td><td><input class="easyui-textbox" name="email" style="width:auto;"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Fax:</td><td><input class="easyui-textbox" name="fax" style="width:auto;"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </td>
+
+                    </tr>
+
+                </table>
+                <br/>
 
 
+                <table width='100%' style="border-collapse: collapse; padding: 10px; margin:0;  ">
+                    <tr style="background: #f1f1f1; font-weight: 700; ">
+                        <td>Item</td>
+                        <td>Description</td>
+                        <td>Row</td>
+                        <td>Column</td>
+                        <td>Qty</td>
+                        <td>Unit Price</td>
+                        <td>Price</td>
+                        <td>Dis (%)</td>
+                        <td>Dis At</td>
+                        <td>Receivable Amt</td>
+                        <td>VAT(%)</td>
+                        <td>TAX(%)</td>
+                    </tr>
+                    <tr style="background: #f1f1f1;  ">
+                        <td>
+                            <select class="easyui-combobox" name="item" style="width:100px;">
+                                <option>test1</option>
+                                <option>test2</option>
+                            </select>
+                        </td>
+                        <td> <textarea style="width:120px;height:35px;resize:none" name="description"></textarea></td>
+                        <td><input type="text" name="o_row" class="row" style="width:25px;" readonly="readonly"></td>
+                        <td><input type="text" name="o_column" class="column" style="width:30px;" readonly="readonly"></td>
+                        <td> <input  name="qty"  style="width:40px;"  readonly="readonly"></td>
+                        <td> <input  name="unit_price"  style="width:40px;"  readonly="readonly"></td>
+
+                        <td> <input  name="price"  style="width:40px;" readonly="readonly"></td>
+                        <td> <input  name="discount"  style="width:40px;"  readonly="readonly"> </td>
+                        <td>
+                            <input name="discount_amount" style="width: 40px;"  readonly="readonly">
+                            <input name="ait_others_discount" type="hidden" value="0" >
+                        </td>
+
+                        <td> <input  name="payable_amount"  style="width:40px;"  readonly="readonly"></td>
+                        <td> <input  name="vat" value="0"  style="width:40px;"></td>
+                        <td> <input  name="tax" value="0"  style="width:40px;" ></td>
+
+                    </tr>
+                </table>
+
+
+
+
+            </form>
+
+        </div>
+        <div region="south" border="false" style="text-align:right;height:30px;line-height:30px;">
+
+        </div>
+
+
+    </div> <!-- layout End -->
+
+</div><!-- Invoice Form dialog end -->
+
+<div id="dlg-buttons-invoice">
+    <a href="#" class="easyui-linkbutton" iconCls="icon-save" onclick="saveInvoice();">Save</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dg_invoice_form').dialog('close')">Close</a>
+</div>
+<!-- End Invoice dlg buttons and All -->
 
 
 
 <!-- *************************** For all Individual invoices ********************* -->
 
-<div class="easyui-dialog" id="dlg_ind_all_invoices" data-options="iconCls:'icon-invoice_color' " style="width: 100%; height: 90%" closed='true' buttons='#dg_button_ind_all_invoice'>
+<div class="easyui-dialog" id="dlg_ind_all_invoices" data-options="iconCls:'icon-invoice_color' " style="width: 78%; height: 90%" closed='true' buttons='#dg_button_ind_all_invoice'>
     <div class="easyui-layout" data-options="region:'center' " >
 
         <table class="easyui-datagrid" id="dg_ind_all_invoices" pagination='false' showFooter='true' 
-               singleSelect="false" rownumbers='true' toolbar='#dg_toolbar_ind_all_invoice' 
+               singleSelect="true" rownumbers='true' toolbar='#dg_toolbar_ind_all_invoice' 
                sortName="order_id" sortOrder="desc"
-               style="width:100%; height: 250px;">
+               style="width:auto; height: 250px;">
             <thead>
                 <tr>
                     <th data-options="field:'ck',checkbox:true "></th>
                     <th field="order_id" sortable="true">O. Id</th>
-                    <th field='invoice_id'>Inv. Id.</th>
-                    <th field='pub_date'>Pub. Date</th>
-                    <th field='invoice_date'>Inv. Date</th>
-                    <th field='order_date' sortable="true">O. Date</th>
-                    <th field='size'>Size</th>
-                    <th data-options="field:'price',align:'right' ">Price</th>
-                <th data-options="field:'front_page',align:'right' " width="100">F. Page Charge(%)</th>
-                <th data-options="field:'back_page',align:'right' "  width="100">B. Page Charge(%)</th>
-                    <th data-options="field:'color',align:'right' "  width="100">Colr. Charge(%)</th>
-                    <th data-options="field:'discount',align:'right' ">Dis.(%)</th>
-                    <th data-options="field:'discount_amount',align:'right' ">Dis. Amt.</th>
-            <th data-options="field:'vat',align:'right' ">VAT(%)</th>
-            <th data-options="field:'tax',align:'right' ">TAX(%)</th>
-                    <th data-options="field:'ait_others_discount',align:'right' "  width="100">AIT/Orthers</th>
-                    <th data-options="field:'payable_amt_inv',align:'right',formatter:formatPrice">Due Amt.</th>
+                    <th field='payment_id'>Payment. Id.</th>
+                    <th field='payment_date' sortable="true">Payment. Date</th>
+                    <th data-options="field:'payable_amount',align:'right' ">Receivable Amount</th>
+                    <th data-options="field:'receive_amount',align:'right' ">Received Amount</th>
+                    <th data-options="field:'commission',align:'right' ">Commission (%)</th>
+                    <th data-options="field:'commission_amount',align:'right' ">Commission Amount</th>
+                    
+                    <th data-options="field:'due',align:'right',formatter:formatPrice">Due Amt.</th>
                     <th field="status" data-options="sortable:'true' "> Status</th>
                 </tr>
             </thead>
@@ -650,40 +640,46 @@
 
         &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
         <a href="javascript:void()" iconCls="icon-bill" class="easyui-linkbutton" onclick="loadPayment()">All Payments</a>
--- Click to see all transaction of this Client --
+
         <div id="individual_payment" style="max-height: 200px;">
-            
+            -- Click the above to see all transaction of this selected Reference --
         </div>
         <div class="easyui-dialog" id="dlg_payment_form" closed="true"  data-options="iconCls:'icon-bill' " 
-             style="padding:5px; width:100%; height: 600px; " buttons="#dlg-buttons-payment" >
+             style="padding:5px; width:700px; height: 600px; " buttons="#dlg-buttons-payment" >
             <form name="receive_payment_form" id="receive_payment_form" method="POST">
-                <h2 style="color:#555;">Customer Payment
+                <h2 style="color:#555;">Reference Payment
                     <span style="float: right; color:#666;">
                         <label>Invoice ID # </label>
-                        <input class="easyui-textbox" name="invoice_id" style="width:100px; border:1px #ccc solid;"/>
-                        <input type="hidden" name="order_id" style="width:100px; border:1px #ccc solid;"/>
+                        <input class="easyui-textbox" name="invoice_id" style="width:100px; border:1px #ccc solid;" readonly="readonly" />
+                        Order Id # <input type="text" name="order_id" style="width:100px; border:1px #ccc solid;"  readonly="readonly"  />
                     </span>
                 </h2>
-                <div class="left_div">
-                      <table width='100%' cellpadding='5'>
+                <table width='100%' cellpadding='5'>
                     <tr>
-                        <td>Received From</td><td>
-                            <input class="easyui-textbox" style="width: 200px;" name="name" id="name" />
+                        <td>Payment To</td><td>
+                            <input class="easyui-textbox" style="width: 200px;" name="ref_name" id="name" />
                             <input type="hidden"  style="width: 150px;" name="cust_id" id="cust_id" />  
-                            <input type="hidden"  style="width: 150px;" name="cust_id_new" id="cust_id_new" />
-                            <input type="hidden" name="ref_id"> 
+                            <input type="hidden"  style="width: 150px;" name="cust_id_new" id="cust_id_new" /> 
                         </td>
-                    </tr>
-
+                        <td style="text-align: right;">
+                            Collection Amount: <br/>
+                            Commission (%):  <br/><br/>
+                            Commission Amount:<br/>
+                            Invoice Amount (After Commission):
+                        </td>
                         <td>
-                            </tr>
-                    <tr>
-                        <td>Amount</td><td><input type="text"  name="receive_amount" id="receive_amount" style=" font-weight: bold; width: 100px; padding: 2px; line-height: 18px; text-align: right;  border-radius: 5px; border:1px #ccc solid;"  required="required" autocomplete="off"/></td>
-                        <td style="text-align: right;">Collected Amount</td><td><input type="text" name="paid_amount" id="paid_amount" style="  width: 100px; padding: 2px; line-height: 18px;  border-radius: 5px; border:1px #ccc solid;"/></td>
+                            <input class="easyui-textbox" name="receive_amount" id="txtprice" style="margin:3px;" /><br/>
+                            <input class="easyui-textbox" name="commission" id="txtdiscount" style="margin:3px;" /><br/>
+                            <input type="text" name="discount_amt" id="txtdiscount_amt" style="  width: 100px; padding: 2px; line-height: 18px;  border-radius: 5px; border:1px #ccc solid;" value=""  /><br/>
+                            <input  type="text"  name="order_price" id="order_price" style="  width: 100px; padding: 2px; line-height: 15px;  border-radius: 5px; border:1px #ccc solid;" /></td>
                     </tr>
-                    <tr><td>Commission on Receive Amt.(%)</td>
+                    <tr>
+                        <td> Amount</td><td><input type="text"  name="receive_amount" id="receive_amount" style=" font-weight: bold; width: 100px; padding: 2px; line-height: 18px; text-align: right;  border-radius: 5px; border:1px #ccc solid;"  required="required" autocomplete="off"/></td>
+                        <td style="text-align: right;">Paid Amount</td><td><input type="text" name="paid_amount" id="paid_amount" style="  width: 100px; padding: 2px; line-height: 18px;  border-radius: 5px; border:1px #ccc solid;"/></td>
+                    </tr>
+                    <tr><td>Commission on Collection Amt.(%)</td>
                         <td><input type="text"  name="commission" id="commission" style=" font-weight: bold; width: 100px; padding: 2px; line-height: 18px; text-align: right;  border-radius: 5px; border:1px #ccc solid;"  required="required" autocomplete="off"/></td>
-                             <td>Receivable Amount</td><td><input type="text"  name="payable_amt_inv" id="payable_amount_p" style=" font-weight: bold; width: 100px; padding: 2px; line-height: 18px;  border-radius: 5px; border:1px #ccc solid;"  /></td>
+                             <td>Receivable Amount</td><td><input type="text"  name="payable_amount" id="payable_amount_p" style=" font-weight: bold; width: 100px; padding: 2px; line-height: 18px;  border-radius: 5px; border:1px #ccc solid;"  /></td>
                     </tr>
                     <tr>
                         <td>AIT and Others/ Adjustment:</td>
@@ -692,13 +688,13 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Payment Date</td><td><input class="easyui-datebox" name="payment_date" id="payment_date" required="required" /></td>
+                        <td>Payment Date</td><td><input class="easyui-datetimebox" name="payment_date" id="payment_date" /></td>
                    
 
                     </tr>
                     <tr>
                         <td>Pmt. Method</td><td>
-                            <select class="easyui-combobox" name="payment_method" id="payment_method" style="width:150px;" required="required">
+                            <select class="easyui-combobox" name="payment_method" id="payment_method" style="width:150px;">
                                 <option value="Cash">Cash</option>
                                 <option value="Bank">Bank</option>
                             </select></td>
@@ -708,20 +704,13 @@
                         <td>Memo</td><td><input class="easyui-textbox" name="memo" id="memo"></td>
                         <td>Deposit to</td>
                         <td>
-                            <select name="deposite_to" id="deposite_to" style="width: 150px;">
+                            <select class="easyui-combobox" name="deposite_to" id="deposite_to" style="width: 150px;">
                                 <option value="">-- Please Select --</option>
-                                <option value="addNew">Add New</option>
-                                            <?php
-                   
-                    $query_bank = $con->prepare("Select id, bank_name from bankname group by bank_name");
-                    $query_bank->execute();
-                    while ($row_ref = $query_bank->fetch(PDO::FETCH_ASSOC)) {
-                        extract($row_ref);
-                        ?>
-                        <option value="<?php echo $id; ?>"><?php echo $bank_name; ?></option>
-                        <?php
-                    }
-                    ?>
+                                <option value="Sonali Bank Ltd">Sonali Bank</option>
+                                <option value="Premier Bank">Premier Bank</option>
+                                <option value="Agrani Bank Ltd">Agrani Bank Ltd.</option>
+                                <option value="Dutch Bangla Bank Ltd">Dutch Bangla Bank Ltd.</option>
+                                <option value="Dhaka Bank Ltd">Dhaka Bank Ltd.</option>
                             </select>
                         </td>
                     </tr>
@@ -729,42 +718,6 @@
                     <tr><td><input type="hidden" name="status_memo" id="status_memo" value=""></td><td></td><td></td><td></td></tr>
                     <tr><td></td><td></td><td></td><td></td></tr>
                 </table>
-                </div>
-                <div class="right_div">
-                   
-                    Price:<br>
-                            <input class="easyui-textbox" name="price" id="txtprice" id="txtprice_p" style="margin:3px;" /><br/>
-                       
-                            Front Page(%):<br>
-                             <input class="easyui-textbox" name="front_page" id="front_page_p" style="margin:3px;" /><br/>
-                        
-                        Back Page (%):<br>
-                             <input class="easyui-textbox" name="back_page" id="back_page_p" style="margin:3px;" /><br/>
-                        
-                        Color Page (%):<br>
-                             <input class="easyui-textbox" name="color" id="color_p" style="margin:3px;" /><br/>
-                      
-                        Discount (%): <br>
-                         <input class="easyui-textbox" name="discount" id="txtdiscount" style="margin:3px;" /><br/>
-                           
-                       
-                        Discount Amount:<br>
-                         <input type="text" name="discount_amt" id="txtdiscount_amt" style="  width: 100px; padding: 2px; line-height: 18px;  border-radius: 5px; border:1px #ccc solid;" value=""  /><br/>
-                           
-                        
-                        Total Advt. Bill (excluding VAT & TAX):<br>
-                        <input  type="text"  name="order_price" id="order_price" style="  width: 100px; padding: 2px; line-height: 15px;  border-radius: 5px; border:1px #ccc solid;" /><br>
-                        
-                        VAT(%):<br>
-                            <input class="easyui-textbox" name="vat" id="vat_p" style="margin:3px;" /><br/>
-                      
-                        TAX(%):<br>
-                            <input class="easyui-textbox" name="tax" id="tax_p" style="margin:3px;" /><br/>
-                       Total Amount (including VAT & TAX):<br>
-                       <input type="text"  name="total_amount_v_t" id="total_amount_v_t" style="  width: 100px; padding: 2px; line-height: 15px;  border-radius: 5px; border:1px #ccc solid;" /><br/>
-                 
-                </div>
-              
 
                 <!--                     <div id="individual_payment" style="height:150px; max-height: 160px; overflow-y: scroll;">
                                           Select Receive from field To see all transaction. 
@@ -774,7 +727,7 @@
 
 
 
-                <div style="width: 350px; padding:0px 50px;">
+                <div style="width: 350px;">
                     <br/>
                     <fieldset style="border:1px #ccc solid;"><legend>Amounts for selected Invoice</legend>
                         <table>
@@ -791,7 +744,7 @@
                 </div>
                 <div id="dlg-buttons-payment" style="text-align: right;">
                     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-print" onclick="paymentPreview()">Print Preview</a>
-                    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-save" onclick="savePayment()">Submit</a>
+                    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-save" onclick="savePayment()">Save</a>
                     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg_payment_form').dialog('close')">Close</a>
 
 
@@ -808,8 +761,8 @@
             }
             ?>
 
-            <a href="javascript:void()" class="easyui-linkbutton" iconCls="icon-print" onclick="invoicePrint()" >Print Single Invoice</a>| 
-            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-print" onclick="allInvoicePrint()">Print Multi Invoice</a>
+            <a href="javascript:void()" class="easyui-linkbutton" iconCls="icon-print" onclick="invoicePrint()" >Print Preview Selected Invoice</a>| 
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-print" onclick="allInvoicePrint()">All Invoice Print Preview</a>
             <?php
             if ($_SESSION['s_email'] === 'admin@dailyasianage.com' || $_SESSION['s_email'] === 'superadmin@dailyasianage.com') {
                 ?>
@@ -859,7 +812,6 @@
                     <th data-options="field:'paid_amount',align:'right' ">Paid Amt.</th>
                     <th data-options="field:'due',align:'right' ,formatter:formatPrice ">Due</th>
                     <th field="status" > Status</th>
-           
                 </tr>
             </thead>
         </table>
@@ -898,20 +850,89 @@
 <script type="text/javascript">
 
 
+// For Order start combogird
+$(function(){
+            $('#cust_id').combogrid({
+                panelWidth:500,
+                url: 'customer_profile/get_customer_all.php',
+                idField:'cust_id',
+                textField:'name',
+                fitColumns:true,
+                editable: true,
+                mode:'remote',
+                columns:[[
+                    {field:'cust_id',title:'Customer ID',width:60},
+                    {field:'cust_id_new',title:'cust_id_new',width:80},
+                    {field:'name',title:'Company Name',width:60},
+                    {field:'type',title:'type',align:'right',width:60},
+                    {field:'ref_name',title:'Referance Name',width:150},
+                    {field:'project_name',title:'project_name',align:'center',width:60},
+                    {field:'district',title:'district', align:'center'}
+                ]],
+                onSelect:function(record){
+                   //alert(record); //this is called whn user select the combobox
+                  //do your stuff here///
+                  var g = $('.cust_id').combogrid('grid');   // get datagrid object
+                var r = g.datagrid('getSelected');  // get the selected row
+                $('.cust_id_new').val(r.cust_id_new);
+                $('#txtproject_name').append('<option value="'+r.project_name+'" selected="selected">'+r.project_name+'</option>');
+                $('#txttype').append('<option value="'+r.type+'" selected="selected">'+r.type+'</option>');
+
+                 $('#txtref_name').append('<option value="'+r.ref_id+'" selected="selected">'+r.ref_id+'</option>');
+                        $('#district').combobox('setValue',r.district);
+                         $('#upazila').combobox('setValue',r.upazila);
+                         $('.name').val(r.name);
+                       $('#phone').textbox('setValue',r.phone);
+                       $('#email').textbox('setValue',r.email);
+                       
+                       
+            },
+            onChange:function(value){
+               var gettext = value;
+               $('.name').val(gettext); // For new customer name writting
+                var dt = new Date();
+                var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+
+                                 var str = "", abbr = "";
+                str = value;
+                str = str.split(' ');
+                var length = str.length - 1;
+                for (i = 0; i < str.length; i++) {
+                    //abbr = str[i].substr(0,1);
+                    abbr = str[0].substr(0,1) + str[length].substr(0,1); // this will take first character of first word and last word
+                 $('#cust_id_new').val(abbr+'-'+dt.getFullYear().toString().substr(2,2)+dt.getMonth()+dt.getMinutes()+dt.getSeconds());
+                    // automatically create customer ID new after writting Company Name
+                }
+
+            }
+
+            });
+
+            $("input[name='mode']").change(function(){
+                var mode = $(this).val();
+                $('#cg').combogrid({
+                    mode: mode
+                });
+            });
+                        
+                       
+                        
+        });  
+
 
     // **************** For Individual All  Start **********************
     function formatStatus(val, row) {
-        if (val === '1') {
-            return '<span style="color:green;">(Created)</span>';
-        } else if (val === '0') {
-            return '<a href="#" style="color:red;" onclick="invoice();">(Invoice)</a>';
+        if (val === 'Created') {
+            return '<span style="color:green;">(' + val + ')</span>';
+        } else if (val === 'Invoice') {
+            return '<span style="color:red;">(' + val + ')</span>';
         }
         else {
             return val;
         }
     }
     function formatPrice(val, row) {
-        if (val > 5000) {
+        if (val > 1000) {
             return '<span style="color:red;">(' + val + ')</span>';
         } else {
             return val;
@@ -931,9 +952,9 @@
 
     function IndividualAllInvoice() {
         var row = $('#dg').datagrid('getSelected');
-        $('#dlg_ind_all_invoices').dialog('open').dialog('setTitle', 'All invoices of ' + row.name + ', Client ID: ' + row.cust_id_new);
+        $('#dlg_ind_all_invoices').dialog('open').dialog('setTitle', 'List of All invoices on Reference Name: ' + row.ref_name + ', Reference ID: ' + row.ref_id);
         $('#dg_ind_all_invoices').datagrid({
-            url: 'invoice/get_ind_all_invoices.php?invoice_q=' + row.cust_id
+            url: 'reference_profile/get_ind_all_invoices.php?invoice_q=' + row.ref_id
         });
     }
 
@@ -945,7 +966,7 @@
         //$.messager.alert("Message",row.invoice_num,"info"); 
         if (row) {
 
-            $('#dlg_payment_form').dialog('open').dialog('setTitle', 'Receive Payment Form of ' + row.name + ', Client ID: ' + row.cust_id_new);
+            $('#dlg_payment_form').dialog('open').dialog('setTitle', 'Receive Payment Form of ' + row.ref_name + ', Reference ID: ' + row.ref_id);
 
             $('#dlg_payment_form').dialog('open');
 
@@ -962,41 +983,21 @@
             $('#payment_method').val("");// when open payment form this field will be empty.
             //$('#dlg_payment_form').form('reset');
             // Start Order price will be receivable amount subtract from discount.
-            var price = row.price; var price_amt = parseFloat(price.replace(/,/g, ''));
-            var front_page= row.front_page; var front_parse_amt= parseFloat(front_page.replace(/,/g, ''));
-            var front_amt = price_amt*(front_parse_amt/100);
-            
-            var back_page= row.back_page; var back_parse_amt= parseFloat(back_page.replace(/,/g, ''));
-            var back_amt = price_amt*(back_parse_amt/100);
-            
-            var color_page= row.color; var color_parse_amt= parseFloat(color_page.replace(/,/g, ''));
-            var color_amt = price_amt*(color_parse_amt/100); 
-            
+            var price = row.price;
             var dis_amt = row.discount_amount;
-            
-            var p = price_amt + parseFloat(front_amt) + parseFloat(back_amt) 
-                    + parseFloat(color_amt) - parseFloat(dis_amt.replace(/,/g, '')); // without vat and tax
+
+            var p = parseFloat(price.replace(/,/g, '')) - parseFloat(dis_amt.replace(/,/g, ''));
             $('#order_price').val(p); // invoice price after commission
             // End Order price will be receivable amount subtract from discount.
             $('#txtdiscount_amt').val(dis_amt); // put discount amt
-            
-            var vat = row.vat; var vat1 = parseFloat(vat);
-            var vat_amt = p*(vat1/100);
-            
-            var tax = row.tax; var tax1 = parseFloat(tax);
-            var tax_amt = p*(tax1/100);
-            
             // Start For Display Paid Amt in payment form
             //parseFloat('100,000.00'.replace(/,/g, ''))
-            var total_amount = p + vat_amt + tax_amt; // including vat and tax
-            var total_amount1 = total_amount.toFixed(2);
-            $('#total_amount_v_t').val(total_amount1);
-            
-            var payable_amount = row.payable_amt_inv; var payable_amount1 = payable_amount.replace(/,/g, '');
-            var ait_others = row.ait_others_discount; var ait_others1 = ait_others.replace(/,/g, '');
+            var order_price = document.getElementById('order_price').value;
+            var payable_amount1 = row.payable_amount;
+            var ait_others = row.ait_others_discount;
 
-            var payable_ait_amt = parseFloat(payable_amount1) + parseFloat(ait_others1);
-            var paid_amt = parseFloat(total_amount) - parseFloat(payable_ait_amt);
+            var payable_ait_amt = parseFloat(payable_amount1.replace(/,/g, '')) + parseFloat(ait_others.replace(/,/g, ''));
+            var paid_amt = parseFloat(order_price.replace(/,/g, '')) - payable_ait_amt;
             document.getElementById('paid_amount').value = paid_amt.toFixed(2);
 
             // End Display Paid Amt in payment form
@@ -1030,8 +1031,8 @@
                         showType: 'show'
                     });
                 } else {
-                    $('#dlg_payment_form').dialog('close');		// close the dialog
-                    $('#dg_ind_all_invoices').datagrid('reload');	// reload the user data
+                    $('#dlg_payment_form').dialog('close');     // close the dialog
+                    $('#dg_ind_all_invoices').datagrid('reload');   // reload the user data
                     $('#receive_payment_form').form('reset');
                     $.messager.show({
                         title: 'Info',
@@ -1053,12 +1054,14 @@ $('.table_order tbody').delegate('.row,.column,.qty','keyup',function(){
         var qty = tr.find('.qty').val();
         var total_qty = row*column;
         $('.qty').val(total_qty);
+
 });
 // ********************* End Row and column ******************
     // ******************* start substraction for due balance. *****************
 
     $('#receive_amount').each(function () {
         $(this).keyup(function () {
+
             subtraction();
             //alert("test");
         });
@@ -1082,6 +1085,7 @@ $('.table_order tbody').delegate('.row,.column,.qty','keyup',function(){
 
         $("#receive_amount").each(function () {
 
+
             var sum = " ";
             $("#payable_amount_p").each(function () {
 
@@ -1094,6 +1098,7 @@ $('.table_order tbody').delegate('.row,.column,.qty','keyup',function(){
                 if (isNaN(pay)) {
                     $('#payable_amount_p').val("");
                 }
+
 
             });
 
@@ -1212,10 +1217,9 @@ $('.table_order tbody').delegate('.row,.column,.qty','keyup',function(){
 
     function loadPayment() {
 
-var x = document.getElementById('individual_payment');
-if(x.style.display === "none"){
-    x.style.display = "block";
-     var row = $('#dg').datagrid('getSelected');
+        var row = $('#dg').datagrid('getSelected');
+
+
         if (row) {
             $.ajax({
                 url: 'payment/get_payment_individual.php?q=' + row.cust_id,
@@ -1227,10 +1231,7 @@ if(x.style.display === "none"){
         else {
             $('#individual_payment').hide();
         }
-}else{
-    x.style.display = "none";
-}
-       
+
 
     }
 
@@ -1262,7 +1263,7 @@ if(x.style.display === "none"){
             var order_price = document.getElementById('order_price').value;
             var paid_amount = document.getElementById('paid_amount').value;
             var payable_amount = document.getElementById('payable_amount_p').value;
-            var payment_date = $('#payment_date').datebox('getText');	// get datetimebox value
+            var payment_date = $('#payment_date').datetimebox('getText');   // get datetimebox value
 
             var payment_method = $('#payment_method').combobox('getText'); // get combobox value
 
@@ -1309,15 +1310,10 @@ if(x.style.display === "none"){
     // INVOICE PRINT START 
     function invoicePrint() {
         var row = $('#dg_ind_all_invoices').datagrid('getSelected');
-        var rows = $('#dg_ind_all_invoices').datagrid('getSelections');
-        var ids=[];
         if (row) {
-                    for(var i=0; i<rows.length; i++){
-             ids.push(rows[i].invoice_id);
-    }
-    //   	alert(ids.join('\n'));
-        
-          window.open("Report/print_individual_cust_invoice_new.php?cust_id=" + row.cust_id + "&inv_id=" + row.invoice_id, "myNewWinsr", "width=990,height=600,toolbar=0,menubar=no,status=no,resizable=yes,location=no,direction=no,scrollbars=yes");
+
+            window.open("Report/print_individual_cust_invoice.php?cust_id=" + row.cust_id + "&inv_id=" + row.invoice_id, "myNewWinsr", "width=990,height=600,toolbar=0,menubar=no,status=no,resizable=yes,location=no,direction=no,scrollbars=yes");
+
         }
         else {
             $.messager.show({
@@ -1331,15 +1327,8 @@ if(x.style.display === "none"){
 
     function allInvoicePrint() {
         var row = $('#dg').datagrid('getSelected');
- var rows = $('#dg_ind_all_invoices').datagrid('getSelections');
-        var ids=[];
-            if (row) {
-                      for(var i=0; i<rows.length; i++){
-             ids.push(rows[i].invoice_id);
-        }
-        window.open("Report/print_individual_cust_all_invoice.php?cust_id=" + row.cust_id + "&ids=" + ids, "myNewWinsr", "width=990,height=600,toolbar=0,menubar=no,status=no,resizable=yes,location=no,direction=no,scrollbars=yes");
-        }
-        
+
+        window.open("Report/print_individual_cust_all_invoice.php?cust_id=" + row.cust_id, "myNewWinsr", "width=990,height=600,toolbar=0,menubar=no,status=no,resizable=yes,location=no,direction=no,scrollbars=yes");
     }
 
     // INVOICE PRINT END
@@ -1373,18 +1362,16 @@ if(x.style.display === "none"){
     // End to Create Customer Id New //
 
 
-
     function profile() {
         var row = $('#dg').datagrid('getSelected');
 
         if (row) {
 
             $('#grid_order').datagrid({
-                url: 'order/get_order.php?q=' + row.cust_id
-
+                url: 'reference_profile/get_order.php?q=' + row.ref_id
             });// grid_order individual data load.
 
-            $('#profile').dialog('open').dialog('setTitle', ' Order of ' + row.name + ', Customer Id: ' + row.cust_id_new);
+            $('#profile').dialog('open').dialog('setTitle', ' Details of ' + row.ref_name + ', Reference Id: ' + row.ref_id);
 
 //            $.ajax({
 //                url: 'order/get_order_individual.php?q=' + row.cust_id,
@@ -1399,7 +1386,7 @@ if(x.style.display === "none"){
         else {
             $.messager.show({
                 title: 'Message',
-                msg: 'Please select atleast one Client. And create new order, invoice, bill and more..',
+                msg: 'Please select atleast one Reference. And create new order, invoice, bill and more..',
                 showType: 'show'
             });
         }
@@ -1432,8 +1419,8 @@ if(x.style.display === "none"){
                     });
                 } else {
                     
-                    $('#reference').dialog('close');		// close the dialog
-                    //$('#dg').datagrid('reload');	// reload the user data
+                    $('#reference').dialog('close');        // close the dialog
+                    //$('#dg').datagrid('reload');  // reload the user data
                     // Start load Reference select data
                     $.ajax({
                         url: 'reference_profile/get_reference.php',
@@ -1463,7 +1450,7 @@ if(x.style.display === "none"){
     function order_individual() {
 
         var row = $('#dg').datagrid('getSelected');
-        $('#order_individual').dialog('open').dialog('setTitle', 'Add New Order. Customer Id: ' + row.cust_id_new);
+        $('#order_individual').dialog('open').dialog('setTitle', 'Add New Order on Ref Id: ' + row.ref_id);
         $('#order_form').form('clear');
         $('.cust_id').val(row.cust_id);
         $('.cust_id_new').val(row.cust_id_new);
@@ -1494,7 +1481,7 @@ if(x.style.display === "none"){
             var year = d.getFullYear();
             //(date + "/" + month + "/" + year);
             var datea = month + "/" + date + "/" + year;
-            $('#order_date').datebox('setValue', datea);
+            $('#order_date').datetimebox('setValue', datea);
             url_order = 'order/update_user.php?id=' + row.order_id;
             //$.messager.alert('Message', "Update Successfully.", 'info');
         }
@@ -1510,7 +1497,6 @@ if(x.style.display === "none"){
     } // Edit function for order End.
 
     function saveOrder() {
-        $('order_save_btn').val("Please Wait...");
         $('#order_form').form('submit', {
             url: url_order,
             onSubmit: function () {
@@ -1524,10 +1510,10 @@ if(x.style.display === "none"){
                         msg: result.errorMsg
                     });
                 } else {
-                $('order_save_btn').val("Save");
-                    $('#grid_order').datagrid('reload');	// reload the user data
+
+                    $('#grid_order').datagrid('reload');    // reload the user data
                     $('#order_form').form('clear');
-                    $('#order_individual').dialog('close');		// close the dialog
+                    $('#order_individual').dialog('close');     // close the dialog
                 $.messager.show({
                 title: 'Message',
                 msg: 'Order Saved Successfuly.',
@@ -1553,7 +1539,7 @@ if(x.style.display === "none"){
                 if (r) {
                     $.post('order/destroy_user.php', {id: row.order_id}, function (result) {
                         if (result.success) {
-                            $('#grid_order').datagrid('reload');	// reload the user data
+                            $('#grid_order').datagrid('reload');    // reload the user data
                         } else {
                             $.messager.show({// show error message
                                 title: 'Error',
@@ -1581,21 +1567,13 @@ if(x.style.display === "none"){
 
     }
     function details_company() {
-          var x = document.getElementById("demo");
-    if (x.style.display === "none") {
-        x.style.display = "block";
-         var row = $('#dg').datagrid('getSelected');
+        var row = $('#dg').datagrid('getSelected');
             $.ajax({
-                url: 'pages/display_individual_profile.php?q=' + row.cust_id_new,
+                url: 'pages/display_individual_profile_reference.php?q=' + row.ref_id,
                 success: function (data) {
                     $('p#demo').html(data);
                 }
             });
-    } else {
-        x.style.display = "none";
-    }
-       
-
     }
     
     function loadDoc() {
@@ -1641,6 +1619,7 @@ if(x.style.display === "none"){
         var sum = " ";
         //iterate through each textboxes and add the values
         $("#price").each(function () {
+
             //add only if the value is number
             if (!isNaN(this.value) && this.value.length !== 0) {
                 sum = parseFloat(this.value);
@@ -1648,6 +1627,8 @@ if(x.style.display === "none"){
             if (isNaN(this.value)) {
                 $('#price').val("");
             }
+
+
         });
 
         $("#discount").each(function () {
@@ -1673,91 +1654,7 @@ if(x.style.display === "none"){
 
     // *************** End Order related work ***********
 
-        // *************** Start Multi Invoice Form related work ***********
-                var url_invoice_multi;
-    function invoiceMulti() {
-        var row = $('#grid_order').datagrid('getSelected');
-        if (row) {
-            $('#dg_invoice_multi_form').dialog('open').dialog('setTitle', 'Create Multiple Invoice');
-            $('#dg_invoice_multi_form').form('load', row);
-            // var ids = []; 
-			var rows = $('#grid_order').datagrid('getSelections');
-                        var sr =1;
-                        
-			for(var i=0; i<rows.length; i++){
-                            
-                               var tr = '<tr  style="background:#f1f1f1;"><td>'+ sr++ +'</td>'+
-        '<td class="center"><input type="text" name="cust_id[]" required="required" readonly="true" autocomplete="off" value="'+rows[i].cust_id+'"></td>'+
-        '<td class="center"><input type="text" name="cust_id_new[]" required="required" readonly="true" autocomplete="off" value="'+rows[i].cust_id_new+'"></td>'+
-        '<td class="center"><input type="text" name="order_id[]" required="required" readonly="true" autocomplete="off" value="'+rows[i].order_id+'"></td>'+
-        '<td class="center"><input type="text" name="order_date[]" value="'+rows[i].order_date+'" readonly="true"></td>'+
-        '<td class="center"><input type="text" name="pub_date[]" class="pub_date" ></td>'+
-        '<td class="center"><input type="text" name="invoice_date[]" class="invoice_date" ></td>'+
-        '<td class="center"><input type="text" name="payable_amount[]" readonly="true" value="'+rows[i].payable_amount+'"></td>'+
-        '<td class="center"><input type="text" name="work_order_no[]" readonly="true" value="'+rows[i].work_order_no+'"></td>'+
-        '<td class="center"><input type="text" name="ref_id[]" readonly="true" class="easyui-datebox" value="'+rows[i].ref_id+'"></td>'+
-        '<td class="center"><input type="text" name="item[]" readonly="true" value="'+rows[i].item+'"></td>'+    
-                        '</tr>';
-                     $('tbody.multi_invoice_table').append(tr);
-				// ids.push(rows[i].order_id);
-			}
-//			alert(ids.join('\n'));
-            url_invoice_multi = 'invoice/save_multi_invoice.php';
-        }
-        else {
-            //$.messager.alert('Message', "Please select atleast one item for Invoice.", 'info');
-            $.messager.show({
-                title: 'Message',
-                msg: 'Please select atleast one order.',
-                showType: 'show',
-                style: {
-                    right: '',
-                    bottom: ''
-                }
-
-            });
-       }
-    } // invoice Multiple function.
-    function saveMultiInvoice() {
-               var pub_date =  $('.pub_date').val();
-               var invoice_date =  $('.invoice_date').val();
-               if(pub_date!=="" && invoice_date!==""){
-        $('#multi_invoice_form').form('submit', {
-            url: url_invoice_multi,
-            onSubmit: function () {
-                return $(this).form('validate');
-            },
-            success: function (result) {
-                console.log(result);
-                var result1 = eval('(' + result + ')');
-                if (result1.errorMsg) {
-                    $.messager.show({
-                        title: 'Error',
-                        msg: result1.errorMsg
-                    });
-                } else {
-                  $('#grid_order').datagrid('reload');	// reload the user data
-                   // $('#dg_invoice_form').form('clear');
-                     $('tbody.multi_invoice_table').text(""); // after submit row of table will be empty
-                    $('#dg_invoice_multi_form').dialog('close');  // close the dialog
-                    $.messager.show({
-                        title: 'Message',
-                        msg: 'Invoice Created successfully.',
-                        showType: 'show'
-                    });
-                }
-            }
-        });
-               }else{
-                   alert('Please Fill all of the Published Date and Invoice Date.');
-               }
-    }
-    function MultiDialogboxClose(){
-         $('#dg_invoice_multi_form').dialog('close');
-           $('tbody.multi_invoice_table').text("");
-    }
-// End Multiple Invoice
- // *************** Start Individual Invoice Form related work ***********
+    // *************** Start Invoice Form related work ***********
     var url_invoice;
     function invoice() {
 
@@ -1776,7 +1673,7 @@ if(x.style.display === "none"){
             //$.messager.alert('Message', "Please select atleast one item for Invoice.", 'info');
             $.messager.show({
                 title: 'Message',
-                msg: 'Please select atleast one order.',
+                msg: 'Please select atleast one item..',
                 showType: 'show',
                 style: {
                     right: '',
@@ -1784,7 +1681,7 @@ if(x.style.display === "none"){
                 }
 
             });
-       }
+        }
 
     } // invoice function.
     function saveInvoice() {
@@ -1794,35 +1691,45 @@ if(x.style.display === "none"){
                 return $(this).form('validate');
             },
             success: function (result) {
-                var result1 = eval('(' + result + ')');
-                if (result1.errorMsg) {
+                var result = eval('(' + result + ')');
+                if (result.errorMsg) {
                     $.messager.show({
                         title: 'Error',
-                        msg: result1.errorMsg
+                        msg: result.errorMsg
                     });
                 } else {
-                
-                   $('#grid_order').datagrid('reload');	// reload the user data
-                   // $('#invoice_form').form('clear');
-                     $('tbody.multi_invoice_table').text(""); // after submit row of table will be empty
-                    $('#dg_invoice_form').dialog('close');		// close the dialog
-//                    setTimeout(
-//                         function(){
-//                                document.getElementById( "invoice_form" ).reset();
-//                            },5);
+                    $('#dg_invoice_form').dialog('close');      // close the dialog
+                    $('#grid_order').datagrid('reload');    // reload the user data
+                    $('#invoice_form').form('clear');
+
+
+
                     // $.messager.alert('Message',"Saved successfully ","info");
                     $.messager.show({
                         title: 'Message',
                         msg: 'Invoice Created successfully.',
                         showType: 'show'
                     });
-   
+
+//                                        var row = $('#dg').datagrid('getSelected');
+//                                        
+//                                    $.ajax({
+//                            url:'order/get_order_individual.php?q=' + row.cust_id,
+//                            success: function(data){
+// 
+//                            $('#individual_order').html(data);
+//                                
+//                            }
+//                        });//  For Individual Order display reload div.
+
                 }
             }
         });
     }
 
-    // Individual Invoice SaveInvoice Function End.
+    // SaveInvoice Function End.
+
+
 
 
 </script>
@@ -1846,10 +1753,10 @@ if(x.style.display === "none"){
     });
 
     var url;
-    function newUser() {
-        $('#dlg').dialog('open').dialog('setTitle', 'New Customer Information');
-        $('#fm').form('clear');
-        url = 'customer_profile/save_user.php';
+    function newReference() {
+            $('#reference').dialog('open').dialog('setTitle','New Reference Information');
+            $('#reference_form').form('clear');
+            url = 'reference_profile/save_user.php';
     }
 
     function editUser() {
@@ -1857,21 +1764,11 @@ if(x.style.display === "none"){
         var row = $('#dg').datagrid('getSelected');
 
         if (row) {
-            $('#dlg').dialog('open').dialog('setTitle', 'Edit Member');
-            $('#fm').form('load', row);
-            var jd = row.join_date;
-            var d = new Date(jd);
-            var date = d.getDate();
-            var month = d.getMonth() + 1;
-            var year = d.getFullYear();
-            //(date + "/" + month + "/" + year);
-            var datea = month + "/" + date + "/" + year;
-            $('#cust_id_new').val(row.cust_id_new);
-            $('select#ref_name').append('<option value="' + row.ref_id + '" selected="selected" >' + row.ref_name + '</option>');
-            $('select.address').append('<option value="' + row.address + '" selected="selected" >' + row.address + '</option>');
-            $('select.district').append('<option value="' + row.id + '" selected="selected" >' + row.statename + '</option>');
-            $('select.upazila').append('<option  value="' + row.id + '" selected="selected">' + row.city + '</option>');
-            url = 'customer_profile/update_user.php?id=' + row.cust_id;
+            $('#reference').dialog('open').dialog('setTitle','Edit Reference');
+                $('#reference_form').form('load',row);
+                $('select.district').append('<option value="' + row.id + '" selected="selected" >' + row.statename + '</option>');
+                $('select.ref_upazila').append('<option  value="' + row.ref_upazila + '" selected="selected">' + row.ref_upazila + '</option>');
+                url = 'reference_profile/update_user.php?id='+row.ref_id;
         }
         else {
             $.messager.show({
@@ -1882,6 +1779,33 @@ if(x.style.display === "none"){
         }
 
     }
+
+
+        function saveReference(){
+            $('#reference_form').form('submit',{
+                url: url,
+                onSubmit: function(){
+                    return $(this).form('validate');
+                },
+                success: function(result){
+                    var result = eval('('+result+')');
+                    if (result.errorMsg){
+                        $.messager.show({
+                            title: 'Error',
+                            msg: result.errorMsg
+                        });
+                    } else {
+                        $('#reference').dialog('close');        // close the dialog
+                        $('#dg').datagrid('reload');    // reload the user data
+                              $.messager.show({
+                                title: 'Message',
+                                msg: 'Saved reference successfully.',
+                                showType: 'show'
+                            });
+                    }
+                }
+            });
+        }
 
     function detailsView() {
         var row = $('#dg').datagrid('getSelected');
@@ -1898,70 +1822,21 @@ if(x.style.display === "none"){
         }
     }
 
-    function saveUser() {
-        $('#fm').form('submit', {
-            url: url,
-            onSubmit: function () {
-                return $(this).form('validate');
-            },
-            success: function (result) {
-                var result1 = eval('(' + result + ')');
-                if (result1.errorMsg) {
-                    $.messager.show({
-                        title: 'Error',
-                        msg: result1.errorMsg
-                    });
-                } else {
-                    $('#dlg').dialog('close');		// close the dialog
-                    $('#dg').datagrid('reload');	// reload the user data
-                    $.messager.show({
-                        title: 'Message',
-                        msg: 'Customer info Saved Successfully.',
-                        showType: 'show'
-                    });
-                }
-            }
-        });
-    }
-    // End Save User Function
-    
-    function saveUserAndNew() {
-        $('#fm').form('submit', {
-            url: url,
-            onSubmit: function () {
-                return $(this).form('validate');
-            },
-            success: function (result) {
-                var result1 = eval('(' + result + ')');
-                if (result1.errorMsg) {
-                    $.messager.show({
-                        title: 'Error',
-                        msg: result1.errorMsg
-                    });
-                } else {
-                    $('#dlg').dialog('open');// close the dialog
-                    $('#fm').form('reset');
-                    $('#cust_id_new').val('');
-                    $('#dg').datagrid('reload');	// reload the user data
-                    $.messager.show({
-                        title: 'Message',
-                        msg: 'Customer info Saved Successfully.',
-                        showType: 'show'
-                    });
-                }
-            }
-        });
-    }
 
 
     function destroyUser() {
         var row = $('#dg').datagrid('getSelected');
         if (row) {
-            $.messager.confirm('Confirm', 'Are you sure you want to destroy this Client? You will lost all data from database of this Client. Confirm! ', function (r) {
+            $.messager.confirm('Confirm', 'Are you sure you want to destroy this Reference? You will lost all data from database of this Reference. Confirm! ', function (r) {
                 if (r) {
-                    $.post('customer_profile/destroy_user.php', {id: row.cust_id}, function (result) {
+                    $.post('reference_profile/destroy_user.php', {id: row.ref_id}, function (result) {
                         if (result.success) {
-                            $('#dg').datagrid('reload');	// reload the user data
+                            $('#dg').datagrid('reload');    // reload the user data
+                                  $.messager.show({
+                                    title: 'Message',
+                                    msg: 'Delete one reference name Successfully',
+                                    showType: 'show'
+                                });
                         } else {
                             $.messager.show({// show error message
                                 title: 'Error',
@@ -2084,6 +1959,7 @@ if(x.style.display === "none"){
                     // only if "OK"
                     if (req.status == 200) {
                         document.getElementById('ref_statediv').innerHTML = req.responseText;
+
                     } else {
                         alert("There was a problem while using XMLHTTP:\n" + req.statusText);
                     }
@@ -2093,36 +1969,8 @@ if(x.style.display === "none"){
             req.send(null);
         }
     }
-    
-    // END GET CITY FUNCTION for Reference
-    
-       
-       // START COMPANY TYPE ON SELECT SHOW COMPANY CATEGORY
-       
-       function companyType(companytypeId) {		
-		
-		var strURL="pages/findCompanyCat.php?companytypeId="+companytypeId;
-		var req = getXMLHTTP();
-		// alert(companytypeId);
-		if (req) {
-			
-			req.onreadystatechange = function() {
-				if (req.readyState == 4) {
-					// only if "OK"
-					if (req.status == 200) {						
-						document.getElementById('txtproject_name').innerHTML=req.responseText;	
-                                            
-					} else {
-						alert("There was a problem while using XMLHTTP:\n" + req.statusText);
-					}
-				}				
-			}			
-			req.open("GET", strURL, true);
-			req.send(null);
-		}		
-	}
-       // END COMPANY TYPE ON SELECT SHOW COMPANY CATEGORY
 
+    // END GET CITY FUNCTION for Reference
 
     // Start Filter for Individual Order
     $(function () {
@@ -2168,7 +2016,7 @@ if(x.style.display === "none"){
                 type: 'combobox',
                 options: {
                     panelHeight: 'auto',
-                    data: [{value: '', text: 'All'}, {value: '1', text: 'Created'}, {value: '0', text: 'Invoice'}],
+                    data: [{value: '', text: 'All'}, {value: 'Created', text: 'Created'}, {value: 'Invoice', text: 'Invoice'}],
                     onChange: function (value) {
                         if (value == '') {
                             dg.datagrid('removeFilterRule', 'status');
@@ -2225,7 +2073,7 @@ if(x.style.display === "none"){
             // var cust_id = row.cust_id;
             var cust_id = $('#selected_id').text();
             // alert(cust_id);
-            var hrf = $(this).attr("href", "customer_profile/printCustomer.php?q=" + cust_id);
+            var hrf = $(this).attr("href", "reference_profile/printReference.php?q=" + cust_id);
 //                $("#customerPrint").printPage({
 //                    url: hrf,
 //                    attr: "href",
@@ -2235,16 +2083,9 @@ if(x.style.display === "none"){
         $("#indcustomerPrint").on("click", function ()
         {
             var row = $('#dg').datagrid('getSelected');
-            var cust_id = row.cust_id;
-            var hrf = $(this).attr("href", "customer_profile/individualPrintCustomer.php?q=" + cust_id);
-
-        });
-        
-           $("#orderPrint").on("click", function ()
-        {
-            var row = $('#dg').datagrid('getSelected');
-            var cust_id = row.cust_id;
-            var hrf = $(this).attr("href", "customer_profile/print_order_indi.php?q=" + cust_id);
+            var ref_id = row.ref_id;
+            // var hrf = $(this).attr("href", "reference_profile/individualPrintCustomer.php?q=" + ref_id);
+             window.open("reference_profile/individualPrintReference.php?q=" + ref_id,"myNewWinsr","width=990,height=600,toolbar=0,menubar=no,status=no,resizable=yes,location=no,direction=no,scrollbars=yes");
 
         });
         
