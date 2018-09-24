@@ -5,7 +5,7 @@
         <div data-options=" region:'center', split:'true', title:'Add New Bank Name', iconCls:'icon-ok' " style="padding:5px;">
             <form id="bank_name_form" method="post" novalidate>
                 <div class="fitem">
-                    <label>Name of Type</label>
+                    <label>Name of Bank</label>
                     <input name="bank_name" class="easyui-textbox" required="true" value="">
                 </div>
                  <div class="fitem">

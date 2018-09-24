@@ -37,7 +37,6 @@
                   $date=new DateTime($row['order_date']);
                 $dt = $date->format('d-M-Y');
                 $row['order_date'] = $dt; // fomat date put $row array.
-                
 
                 $p_date = new DateTime($row['pub_date']);
                 $p_dt = $p_date->format('d-M-Y');
@@ -62,7 +61,7 @@
                 $total_bill_after_dis = $total_add_bill - $discount_amount; // substitute dis amount from price
                 $total_bill_amount = $total_bill_after_dis + ($total_bill_after_dis*$vat/100) + ($total_bill_after_dis*$tax/100);
                 $total_bill = floatval($total_bill_amount);    
-                  $row['payable_amt_inv'] = number_format($payable_amount,2,'.',','); // payable_amount column number format
+                $row['payable_amt_inv'] = number_format($payable_amount,2,'.',','); // payable_amount column number format
             
                 
 
@@ -79,7 +78,7 @@
                 else{
                      $row['status'] = ""; // $payable_amount==0
                 }
-                    
+                
                
                 
 //                if($p > $payable_amount){

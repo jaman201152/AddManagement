@@ -722,7 +722,7 @@
                         <?php
                     }
                     ?>
-                            </select>
+                        </select>
                         </td>
                     </tr>
 
@@ -733,35 +733,35 @@
                 <div class="right_div">
                    
                     Price:<br>
-                            <input class="easyui-textbox" name="price" id="txtprice" id="txtprice_p" style="margin:3px;" /><br/>
+                            <input class="easyui-textbox" name="price" id="txtprice" id="txtprice_p" readonly="true" style="margin:3px;" /><br/>
                        
                             Front Page(%):<br>
-                             <input class="easyui-textbox" name="front_page" id="front_page_p" style="margin:3px;" /><br/>
+                             <input class="easyui-textbox" name="front_page" id="front_page_p"  style="margin:3px;" /><br/>
                         
                         Back Page (%):<br>
-                             <input class="easyui-textbox" name="back_page" id="back_page_p" style="margin:3px;" /><br/>
+                             <input class="easyui-textbox" name="back_page" id="back_page_p"  style="margin:3px;" /><br/>
                         
                         Color Page (%):<br>
-                             <input class="easyui-textbox" name="color" id="color_p" style="margin:3px;" /><br/>
+                             <input class="easyui-textbox" name="color" id="color_p"  style="margin:3px;" /><br/>
                       
                         Discount (%): <br>
                          <input class="easyui-textbox" name="discount" id="txtdiscount" style="margin:3px;" /><br/>
                            
                        
                         Discount Amount:<br>
-                         <input type="text" name="discount_amt" id="txtdiscount_amt" style="  width: 100px; padding: 2px; line-height: 18px;  border-radius: 5px; border:1px #ccc solid;" value=""  /><br/>
+                         <input type="text" name="discount_amt" id="txtdiscount_amt" readonly="true" style="  width: 100px; padding: 2px; line-height: 18px;  border-radius: 5px; border:1px #ccc solid;" value=""  /><br/>
                            
                         
                         Total Advt. Bill (excluding VAT & TAX):<br>
-                        <input  type="text"  name="order_price" id="order_price" style="  width: 100px; padding: 2px; line-height: 15px;  border-radius: 5px; border:1px #ccc solid;" /><br>
+                        <input  type="text"  name="order_price" id="order_price" readonly="true" style="  width: 100px; padding: 2px; line-height: 15px;  border-radius: 5px; border:1px #ccc solid;" /><br>
                         
                         VAT(%):<br>
-                            <input class="easyui-textbox" name="vat" id="vat_p" style="margin:3px;" /><br/>
+                            <input class="easyui-textbox" name="vat" id="vat_p" style="margin:3px;"  /><br/>
                       
                         TAX(%):<br>
-                            <input class="easyui-textbox" name="tax" id="tax_p" style="margin:3px;" /><br/>
+                            <input class="easyui-textbox" name="tax" id="tax_p" style="margin:3px;"  /><br/>
                        Total Amount (including VAT & TAX):<br>
-                       <input type="text"  name="total_amount_v_t" id="total_amount_v_t" style="  width: 100px; padding: 2px; line-height: 15px;  border-radius: 5px; border:1px #ccc solid;" /><br/>
+                       <input type="text"  name="total_amount_v_t" id="total_amount_v_t" readonly="true" style="  width: 100px; padding: 2px; line-height: 15px;  border-radius: 5px; border:1px #ccc solid;" /><br/>
                  
                 </div>
               
@@ -911,7 +911,7 @@
         }
     }
     function formatPrice(val, row) {
-        if (val > 5000) {
+        if (val > 10000) {
             return '<span style="color:red;">(' + val + ')</span>';
         } else {
             return val;
@@ -1016,9 +1016,11 @@
 
 
     function savePayment() {
+       
         $('#receive_payment_form').form('submit', {
             url: url_payment,
             onSubmit: function () {
+                $(this).find("input[type='submit']").prop('disabled',true);
                 return $(this).form('validate');
             },
             success: function (result) {
@@ -1192,6 +1194,7 @@ $('.table_order tbody').delegate('.row,.column,.qty','keyup',function(){
 
                 var ait_discount = document.getElementById('ait_others_discount').value;
                 var ait_discount_amt = parseFloat(ait_discount.replace(/,/g, '')); // number format , remove
+
 
 
                 var paid_amount = $('#paid_amount').val();
