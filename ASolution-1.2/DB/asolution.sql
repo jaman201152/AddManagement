@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.7
+-- version 4.8.2
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Sep 24, 2018 at 08:39 AM
--- Server version: 5.6.41-cll-lve
--- PHP Version: 5.6.30
+-- Host: 127.0.0.1
+-- Generation Time: Oct 01, 2018 at 12:47 PM
+-- Server version: 10.1.34-MariaDB
+-- PHP Version: 7.2.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `hstcl_add_management`
+-- Database: `asolution`
 --
 
 -- --------------------------------------------------------
@@ -867,7 +867,7 @@ CREATE TABLE `tbl_customer` (
   `address` varchar(256) NOT NULL,
   `type` varchar(100) NOT NULL,
   `project_name` varchar(100) NOT NULL,
-  `ref_id` tinyint(100) NOT NULL,
+  `ref_id` smallint(6) NOT NULL,
   `join_date` date NOT NULL,
   `division` varchar(100) NOT NULL,
   `district` varchar(100) NOT NULL,
@@ -1607,7 +1607,8 @@ INSERT INTO `tbl_customer` (`cust_id`, `cust_id_new`, `name`, `address`, `type`,
 (720, 'ZB-188542', 'Zila Hospital (250 Bed),Manikganj', 'Manikganj', '1', '6', 84, '2018-09-06', '1', '7', '477', 'Caretaker', '', '', '', ''),
 (721, 'RR-1882119', 'RAB-2,Dhaka', 'Ser-e-Bangla Nagar', '1', '10', 27, '2018-08-28', '1', '1', '58', 'Commandant', '', '', '', ''),
 (722, 'PS-18809', 'Police Super,Pirojpur', 'Pirojpur', '1', '10', 104, '2018-09-06', '5', '24', '365', 'SP', '', '', '', ''),
-(723, 'DP-188842', 'District Prison,Bagerhat', 'Bagerhat', '1', '10', 37, '2018-08-30', '4', '34', '102', 'Jail Super', '', '', '', '');
+(723, 'DP-188842', 'District Prison,Bagerhat', 'Bagerhat', '1', '10', 37, '2018-08-30', '4', '34', '102', 'Jail Super', '', '', '', ''),
+(724, 'DC-1892746', 'Demo Company', 'Banani', '2', '36', 132, '2018-10-01', '1', '1', '3', 'Amir', '123456', 'demo@gmail.com', '123', 'demo.com');
 
 -- --------------------------------------------------------
 
@@ -1619,7 +1620,7 @@ CREATE TABLE `tbl_ememo` (
   `memo_id` int(11) NOT NULL,
   `cust_id` int(11) NOT NULL,
   `cust_id_new` varchar(100) NOT NULL,
-  `ref_id` tinyint(4) NOT NULL,
+  `ref_id` smallint(6) NOT NULL,
   `order_id` int(11) NOT NULL,
   `invoice_id` int(11) NOT NULL,
   `order_price` double NOT NULL,
@@ -1643,7 +1644,10 @@ CREATE TABLE `tbl_ememo` (
 
 INSERT INTO `tbl_ememo` (`memo_id`, `cust_id`, `cust_id_new`, `ref_id`, `order_id`, `invoice_id`, `order_price`, `paid_amount`, `payable_amount`, `receive_amount`, `ait_others_discount`, `commission`, `due`, `payment_date`, `payment_method`, `memo`, `check_num`, `deposite_to`, `status_memo`) VALUES
 (5, 33, '3B-1834255', 5, 34, 43, 37310, 0, 42906.5, 35071, 0, 30, 7835.5, '2018-07-11', 'Cash', '01', '', '', ''),
-(6, 33, '3B-1834255', 5, 34, 43, 37310, 5596.5, 37310, 35071, 0, 30, 2239, '2018-02-20', 'Cash', '', '2302830', 'Sonali Bank Ltd', '');
+(6, 33, '3B-1834255', 5, 34, 43, 37310, 5596.5, 37310, 35071, 0, 30, 2239, '2018-02-20', 'Cash', '', '2302830', 'Sonali Bank Ltd', ''),
+(7, 715, 'MP-1883618', 10, 1954, 1952, 31980, 0, 36777, 36777, 0, 20, 0, '2018-09-24', 'Cash', '253abc', '', '', ''),
+(8, 721, 'RR-1882119', 27, 1978, 1968, 15990, 0, 18388.5, 388.5, 0, 20, 18000, '2018-09-24', 'Cash', '', '', '', ''),
+(9, 721, 'RR-1882119', 27, 1978, 1968, 15990, 388.5, 18000, 5000, 0, 20, 13000, '2018-09-24', 'Cash', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -1662,7 +1666,7 @@ CREATE TABLE `tbl_invoice` (
   `item` varchar(100) DEFAULT NULL,
   `payable_amount` float NOT NULL,
   `work_order_no` varchar(50) NOT NULL,
-  `ref_id` tinyint(4) NOT NULL,
+  `ref_id` smallint(6) NOT NULL,
   `ait_others_discount` smallint(6) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
@@ -3626,7 +3630,7 @@ INSERT INTO `tbl_invoice` (`invoice_id`, `order_id`, `order_date`, `cust_id`, `c
 (1949, 1957, '2018-08-21', 343, 'BL-184928', '2018-08-22', '2018-08-21', '1', 33099.3, 'BCIC-102', 12, 0),
 (1950, 1956, '2018-08-21', 236, 'LS-1842016', '2018-08-22', '2018-08-21', '1', 24518, 'LGED-B-P-004', 55, 0),
 (1951, 1955, '2018-08-21', 513, 'PS-1863612', '2018-08-22', '2018-08-21', '1', 24518, 'SP-Laxmipur-01', 67, 0),
-(1952, 1954, '2018-08-21', 715, 'MP-1883618', '2018-08-22', '2018-08-21', '1', 36777, 'MPR-RG-01', 10, 0),
+(1952, 1954, '2018-08-21', 715, 'MP-1883618', '2018-08-22', '2018-08-21', '1', 0, 'MPR-RG-01', 10, 0),
 (1953, 1953, '2018-08-21', 144, 'LL-1831656', '2018-08-22', '2018-08-21', '1', 29421.6, 'LGED-CH-CU-06', 59, 0),
 (1954, 1952, '2018-08-21', 49, 'LS-1833139', '2018-08-22', '2018-08-21', '1', 29421.6, 'LGED-RJ-D-01', 22, 0),
 (1955, 1951, '2018-08-21', 17, 'RL-18346', '2018-08-22', '2018-08-21', '1', 50025, 'RBL-11', 3, 0),
@@ -3642,7 +3646,7 @@ INSERT INTO `tbl_invoice` (`invoice_id`, `order_id`, `order_date`, `cust_id`, `c
 (1965, 1961, '2018-08-21', 4, 'PL-1834745', '2018-08-22', '2018-08-21', '1', 11500.2, 'PBL-06', 4, 0),
 (1966, 1960, '2018-08-21', 611, 'EE-1875953', '2018-08-22', '2018-08-21', '1', 9194.25, 'EED-SY-M-04', 30, 0),
 (1967, 1979, '2018-08-28', 126, 'LL-183946', '2018-08-29', '2018-08-28', '1', 22066.2, 'LGED-D-M-2108', 56, 0),
-(1968, 1978, '2018-08-28', 721, 'RR-1882119', '2018-08-29', '2018-08-28', '1', 18388.5, 'RAB-2/18-2523', 27, 0),
+(1968, 1978, '2018-08-28', 721, 'RR-1882119', '2018-08-29', '2018-08-28', '1', 13000, 'RAB-2/18-2523', 27, 0),
 (1969, 1977, '2018-08-28', 8, 'MD-1832648', '2018-08-29', '2018-08-28', '1', 19614.4, 'ISPR-1776', 8, 0),
 (1970, 1976, '2018-08-28', 8, 'MD-1832648', '2018-08-29', '2018-08-28', '1', 19614.4, 'ISPR-DWCE-1782', 8, 0),
 (1971, 1975, '2018-08-28', 164, 'MA-18382', '2018-08-29', '2018-08-28', '1', 16549.7, 'MPA-1063', 33, 0),
@@ -3688,7 +3692,7 @@ CREATE TABLE `tbl_order` (
   `order_id` int(11) NOT NULL,
   `cust_id` smallint(6) NOT NULL,
   `cust_id_new` varchar(100) NOT NULL,
-  `ref_id` tinyint(4) NOT NULL,
+  `ref_id` smallint(6) NOT NULL,
   `order_date` date NOT NULL,
   `type` varchar(100) NOT NULL,
   `project_name` varchar(100) NOT NULL,
@@ -5678,7 +5682,7 @@ INSERT INTO `tbl_order` (`order_id`, `cust_id`, `cust_id_new`, `ref_id`, `order_
 (1951, 17, 'RL-18346', 3, '2018-08-21', '1', '2', 'RBL-11', '1', 'Page-03', 10, 4, 40, 799.5, 31980, 0, 0, 45, 6.19133, 2870.98, 50025, 15, 0, '1'),
 (1952, 49, 'LS-1833139', 22, '2018-08-21', '1', '', 'LGED-RJ-D-01', '1', 'Page-04', 12, 4, 48, 533, 25584, 0, 0, 0, 0, 0, 29421.6, 15, 0, '1'),
 (1953, 144, 'LL-1831656', 59, '2018-08-21', '1', '', 'LGED-CH-CU-06', '1', 'Page-04', 12, 4, 48, 533, 25584, 0, 0, 0, 0, 0, 29421.6, 15, 0, '1'),
-(1954, 715, 'MP-1883618', 10, '2018-08-21', '1', '10', 'MPR-RG-01', '1', 'Page-05', 15, 4, 60, 533, 31980, 0, 0, 0, 0, 0, 36777, 15, 0, '1'),
+(1954, 715, 'MP-1883618', 10, '2018-08-21', '1', '10', 'MPR-RG-01', '1', 'Page-05', 15, 4, 60, 533, 31980, 0, 0, 0, 0, 0, 31980, 15, 0, '1'),
 (1955, 513, 'PS-1863612', 67, '2018-08-21', '1', '10', 'SP-Laxmipur-01', '1', 'Page-05', 10, 4, 40, 533, 21320, 0, 0, 0, 0, 0, 24518, 15, 0, '1'),
 (1956, 236, 'LS-1842016', 55, '2018-08-21', '1', '13', 'LGED-B-P-004', '1', 'Page-11', 10, 4, 40, 533, 21320, 0, 0, 0, 0, 0, 24518, 15, 0, '1'),
 (1957, 343, 'BL-184928', 12, '2018-08-21', '1', '12', 'BCIC-102', '1', 'Page-12', 9, 4, 36, 799.5, 28782, 0, 0, 0, 0, 0, 33099.3, 15, 0, '1'),
@@ -5702,7 +5706,7 @@ INSERT INTO `tbl_order` (`order_id`, `cust_id`, `cust_id_new`, `ref_id`, `order_
 (1975, 164, 'MA-18382', 33, '2018-08-28', '1', '', 'MPA-1063', '1', 'Page-04', 4.5, 4, 18, 799.5, 14391, 0, 0, 0, 0, 0, 16549.7, 15, 0, '1'),
 (1976, 8, 'MD-1832648', 8, '2018-08-28', '', '', 'ISPR-DWCE-1782', '1', 'Page-04', 8, 4, 32, 533, 17056, 0, 0, 0, 0, 0, 19614.4, 15, 0, '1'),
 (1977, 8, 'MD-1832648', 8, '2018-08-28', '', '', 'ISPR-1776', '1', 'Page-04', 8, 4, 32, 533, 17056, 0, 0, 0, 0, 0, 19614.4, 15, 0, '1'),
-(1978, 721, 'RR-1882119', 27, '2018-08-28', '1', '10', 'RAB-2/18-2523', '1', 'Page-11', 10, 3, 30, 533, 15990, 0, 0, 0, 0, 0, 18388.5, 15, 0, '1'),
+(1978, 721, 'RR-1882119', 27, '2018-08-28', '1', '10', 'RAB-2/18-2523', '1', 'Page-11', 10, 3, 30, 533, 15990, 0, 0, 0, 0, 0, 15990, 15, 0, '1'),
 (1979, 126, 'LL-183946', 56, '2018-08-28', '1', '', 'LGED-D-M-2108', '1', 'Page-11', 9, 4, 36, 533, 19188, 0, 0, 0, 0, 0, 22066.2, 15, 0, '1'),
 (1980, 126, 'LL-183946', 56, '2018-08-28', '1', '', 'LGED-D-M-07', '1', 'Page-12', 9, 3, 27, 533, 14391, 0, 0, 0, 0, 0, 16549.7, 15, 0, '1'),
 (1981, 277, 'PS-1841055', 6, '2018-08-28', '1', '10', 'SP-RG-NIL-03', '1', 'Page-12', 11, 5, 55, 533, 29315, 0, 0, 0, 0, 0, 33712.2, 15, 0, '1'),
@@ -5741,7 +5745,7 @@ CREATE TABLE `tbl_payment` (
   `order_id` varchar(20) NOT NULL,
   `cust_id` varchar(20) NOT NULL,
   `cust_id_new` varchar(100) NOT NULL,
-  `ref_id` tinyint(4) NOT NULL,
+  `ref_id` smallint(6) NOT NULL,
   `name` varchar(100) NOT NULL,
   `payable_amount` float NOT NULL,
   `receive_amount` float NOT NULL,
@@ -5760,7 +5764,9 @@ CREATE TABLE `tbl_payment` (
 --
 
 INSERT INTO `tbl_payment` (`payment_id`, `invoice_id`, `order_id`, `cust_id`, `cust_id_new`, `ref_id`, `name`, `payable_amount`, `receive_amount`, `ait_others_discount`, `commission`, `payment_date`, `payment_method`, `check_num`, `memo`, `deposite_to`, `due`) VALUES
-(1, 43, '34', '33', '3B-1834255', 5, '3rd Armed Force Battalion,Khulna', 42906.5, 70142, 0, 30, '2018-02-20', 'Cash', '', '01', '', 2239);
+(1, 43, '34', '33', '3B-1834255', 5, '3rd Armed Force Battalion,Khulna', 42906.5, 70142, 0, 30, '2018-02-20', 'Cash', '', '01', '', 2239),
+(2, 1952, '1954', '715', 'MP-1883618', 10, 'Metropolitan Police,Rangpur', 36777, 36777, 0, 20, '2018-09-24', 'Cash', '', '253abc', '', 0),
+(3, 1968, '1978', '721', 'RR-1882119', 27, 'RAB-2,Dhaka', 18388.5, 5388.5, 0, 20, '2018-09-24', 'Cash', '', '', '', 13000);
 
 -- --------------------------------------------------------
 
@@ -6256,13 +6262,13 @@ ALTER TABLE `state`
 -- AUTO_INCREMENT for table `tbl_customer`
 --
 ALTER TABLE `tbl_customer`
-  MODIFY `cust_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=724;
+  MODIFY `cust_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=725;
 
 --
 -- AUTO_INCREMENT for table `tbl_ememo`
 --
 ALTER TABLE `tbl_ememo`
-  MODIFY `memo_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `memo_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `tbl_invoice`
@@ -6280,7 +6286,7 @@ ALTER TABLE `tbl_order`
 -- AUTO_INCREMENT for table `tbl_payment`
 --
 ALTER TABLE `tbl_payment`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `tbl_property`

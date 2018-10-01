@@ -10,7 +10,8 @@ session_start();
         <link rel="stylesheet" type="text/css" href="themes/icon.css">
 	<link rel="stylesheet" type="text/css" href="css/demo.css">
 <!--	<script type="text/javascript" src="js/jquery.min.js"></script>-->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js">
+     <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"> -->
+        <script src="js/jqueryGoogleAPI.min.js">
 </script>
 	<script type="text/javascript" src="js/jquery.easyui.min.js"></script>
         <script type="text/javascript" src="js/datagrid-scrollview.js"></script>
